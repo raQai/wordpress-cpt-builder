@@ -7,9 +7,9 @@
  * Version: 0.0.1
  */
 
-namespace BIWS;
+namespace BIWS\EventManager;
 
-use BIWS\CPT\Builder\CustomPostTypeBuilder;
+use BIWS\EventManager\cpt\CustomPostTypeBuilder;
 
 defined('ABSPATH') or die('Nope!');
 
@@ -20,11 +20,11 @@ if (!defined('WPINC')) {
 // FIXME use autoloader
 $plugin_dir_path = plugin_dir_path(__FILE__);
 
-if (!class_exists('\BIWS\CPT\CustomPostType')) {
-    require $plugin_dir_path . 'core/CustomPostType.class.php';
+if (!class_exists('\BIWS\EventManager\cpt\CustomPostType')) {
+    require $plugin_dir_path . 'classes/cpt/CustomPostType.class.php';
 }
-if (!class_exists('\BIWS\CPT\Builder\CustomPostTypeBuilder')) {
-    require $plugin_dir_path . 'core/CustomPostTypeBuilder.class.php';
+if (!class_exists('\BIWS\EventManager\cpt\CustomPostTypeBuilder')) {
+    require $plugin_dir_path . 'classes/cpt/CustomPostTypeBuilder.class.php';
 }
 
 CustomPostTypeBuilder::create()

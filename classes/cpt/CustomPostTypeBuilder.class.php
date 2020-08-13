@@ -1,8 +1,6 @@
 <?php
 
-namespace BIWS\CPT\Builder;
-
-use BIWS\CPT\CustomPostType;
+namespace BIWS\EventManager\cpt;
 
 defined('ABSPATH') or die('Nope!');
 
