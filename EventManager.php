@@ -9,25 +9,17 @@
 
 namespace BIWS\EventManager;
 
-use BIWS\EventManager\cpt\CustomPostTypeBuilder;
-
 defined('ABSPATH') or die('Nope!');
 
 if (!defined('WPINC')) {
     die;
 }
- 
-// FIXME use autoloader
-$plugin_dir_path = plugin_dir_path(__FILE__);
 
-if (!class_exists('\BIWS\EventManager\cpt\CustomPostType')) {
-    require $plugin_dir_path . 'classes/cpt/CustomPostType.class.php';
-}
-if (!class_exists('\BIWS\EventManager\cpt\CustomPostTypeBuilder')) {
-    require $plugin_dir_path . 'classes/cpt/CustomPostTypeBuilder.class.php';
-}
+define('BIWS_EventManager__PLUGIN_DIR_PATH', plugin_dir_path( __FILE__ ));
 
-CustomPostTypeBuilder::create()
+include BIWS_EventManager__PLUGIN_DIR_PATH . 'includes/autoloader.inc.php';
+
+cpt\CustomPostTypeBuilder::create()
     ->slug("events")
     ->args(
         array(
