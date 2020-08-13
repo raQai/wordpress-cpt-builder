@@ -18,11 +18,11 @@ class CustomPostType
 
     public function init()
     {
-        \add_action('init', [$this, 'register']);
+        add_action('init', [$this, 'register']);
     }
 
     public function register()
     {
-        \register_post_type($this->slug, $this->args);
+        register_post_type($this->slug, $this->args);
     }
 }
