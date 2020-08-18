@@ -4,7 +4,7 @@
  * Plugin Name: Event Manager
  * Description: Simple EventManager Plugin
  * Author: Patrick Bogdan
- * Version: 0.0.1
+ * Version: 0.1.0
  */
 
 namespace BIWS\EventManager;
@@ -15,12 +15,11 @@ if (!defined('WPINC')) {
     die;
 }
 
-define('BIWS_EventManager__PLUGIN_DIR_PATH', plugin_dir_path( __FILE__ ));
+define('BIWS_EventManager__PLUGIN_DIR_PATH', plugin_dir_path(__FILE__));
 
 include BIWS_EventManager__PLUGIN_DIR_PATH . 'includes/autoloader.inc.php';
 
-cpt\CustomPostTypeBuilder::create()
-    ->slug("events")
+cpt\CustomPostTypeBuilder::create("events")
     ->args(
         array(
             'label' => __('Events', 'biws-textdomain'),
@@ -43,4 +42,30 @@ cpt\CustomPostTypeBuilder::create()
             'rewrite' => array('slug' => "events"),
         )
     )
+    ->addTaxonomy(taxonomy\TaxonomyBuilder::create("tags")
+        ->args(
+            array(
+                'hierarchical' => true,
+                'labels' => array(
+                    'name' => _x("tags", 'taxonomy general name'),
+                    'singular_name' => _x("tag", 'taxonomy singular name'),
+                    'search_items' =>  __('Search ' . "tag"),
+                    'all_items' => __('All ' . "tags"),
+                    'parent_item' => __('Parent ' . "tag"),
+                    'parent_item_colon' => __('Parent ' . "tag" . ':'),
+                    'edit_item' => __('Edit ' . "tag"),
+                    'update_item' => __('Update ' . "tag"),
+                    'add_new_item' => __('Add New ' . "tag"),
+                    'new_item_name' => __('New ' . "tag" . ' Name'),
+                    'menu_name' => __("tags")
+                ),
+                'show_ui' => true,
+                'show_admin_column' => true,
+                'show_tag_cloud' => false,
+                'show_in_rest' => true,
+                'query_var' => true,
+                'rewrite' => array('slug' => "tags"),
+            )
+        )
+        ->build())
     ->buildAndInit();
