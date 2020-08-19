@@ -12,11 +12,14 @@ class CustomPostType
 
     private $taxonomies;
 
-    public function __construct($slug, $args, $taxonomies)
+    private $metaBoxes;
+
+    public function __construct($slug, $args, $taxonomies, $metaBoxes)
     {
         $this->slug = $slug;
         $this->args = $args;
         $this->taxonomies = $taxonomies;
+        $this->metaBoxes = $metaBoxes;
     }
 
     public function init()
@@ -24,6 +27,9 @@ class CustomPostType
         add_action('init', [$this, 'register']);
         foreach ($this->taxonomies as $taxonomy) {
             $taxonomy->initForPostType($this->slug);
+        }
+        foreach ($this->metaBoxes as $metaBox) {
+            $metaBox->initForPostType($this->slug);
         }
     }
 
