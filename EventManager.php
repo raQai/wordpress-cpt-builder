@@ -41,7 +41,7 @@ $events_args = array(
 );
 
 
-$tags_taxonomy = taxonomy\TaxonomyBuilder::create("tags")
+$tags_taxonomy = taxonomy\TaxonomyBuilder::create("taxonomyExample")
     ->args(
         array(
             'hierarchical' => true,
@@ -63,9 +63,10 @@ $tags_taxonomy = taxonomy\TaxonomyBuilder::create("tags")
             'show_tag_cloud' => false,
             'show_in_rest' => true,
             'query_var' => true,
-            'rewrite' => array('slug' => "tags"),
+            'rewrite' => array('slug' => "taxample"),
         )
     )
+    ->addField(taxonomy\fields\FieldType::NUMBER, 'order', 'Order#', true)
     ->build();
 
 $testMetaBox = metabox\MetaBoxBuilder::create("testbox")
