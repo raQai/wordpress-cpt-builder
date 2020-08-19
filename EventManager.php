@@ -4,7 +4,7 @@
  * Plugin Name: Event Manager
  * Description: Simple EventManager Plugin
  * Author: Patrick Bogdan
- * Version: 0.2.0
+ * Version: 0.2.1
  */
 
 namespace BIWS\EventManager;
@@ -19,7 +19,7 @@ define('BIWS_EventManager__PLUGIN_DIR_PATH', plugin_dir_path(__FILE__));
 
 include BIWS_EventManager__PLUGIN_DIR_PATH . 'includes/autoloader.inc.php';
 
-$eventsArgs = array(
+$events_args = array(
     'label' => __('Events', 'biws-textdomain'),
     'description' => __('Turniere und Events', 'biws-textdomain'),
     'labels' => array(
@@ -41,7 +41,7 @@ $eventsArgs = array(
 );
 
 
-$tagsTaxonomy = taxonomy\TaxonomyBuilder::create("tags")
+$tags_taxonomy = taxonomy\TaxonomyBuilder::create("tags")
     ->args(
         array(
             'hierarchical' => true,
@@ -75,7 +75,7 @@ $testMetaBox = metabox\MetaBoxBuilder::create("testbox")
     ->build();
 
 cpt\CustomPostTypeBuilder::create("events")
-    ->args($eventsArgs)
-    ->addTaxonomy($tagsTaxonomy)
+    ->args($events_args)
+    ->addTaxonomy($tags_taxonomy)
     ->addMetaBox($testMetaBox)
     ->buildAndInit();

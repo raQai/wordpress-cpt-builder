@@ -21,20 +21,20 @@ class MetaBox
         $this->args = $args;
     }
 
-    public function initForPostType($postSlug)
+    public function init($post_slug)
     {
-        add_action('add_meta_boxes', function () use ($postSlug) {
-            $this->register($postSlug);
+        add_action('add_meta_boxes', function () use ($post_slug) {
+            $this->register($post_slug);
         });
     }
 
-    public function register($postSlug)
+    public function register($post_slug)
     {
         add_meta_box(
             $this->id,
             $this->title,
             array($this, 'render'),
-            $postSlug,
+            $post_slug,
             $this->context,
             $this->priority,
             $this->args

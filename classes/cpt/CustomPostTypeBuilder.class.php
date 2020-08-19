@@ -12,7 +12,7 @@ class CustomPostTypeBuilder
 
     private $taxonomies = [];
 
-    private $metaBoxes = [];
+    private $meta_boxes = [];
 
     private function __construct($slug)
     {
@@ -38,7 +38,7 @@ class CustomPostTypeBuilder
 
     public function addMetaBox($metaBox)
     {
-        $this->metaBoxes[] = $metaBox;
+        $this->meta_boxes[] = $metaBox;
         return $this;
     }
 
@@ -48,7 +48,7 @@ class CustomPostTypeBuilder
             $this->slug,
             $this->args,
             $this->taxonomies,
-            $this->metaBoxes
+            $this->meta_boxes
         );
         $cpt->init();
         return $cpt;
