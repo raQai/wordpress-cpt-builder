@@ -46,6 +46,13 @@ class TaxonomyBuilder
                     $placeholder
                 );
                 break;
+            case fields\FieldType::COLOR:
+                $this->fields[] = new fields\ColorField(
+                    $id,
+                    $label,
+                    $required
+                );
+                break;
         }
         return $this;
     }
