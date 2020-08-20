@@ -7,4 +7,5 @@ defined('ABSPATH') or die('Nope!');
 abstract class FieldType
 {
     const NUMBER = 0;
+    const TEXT = 1;
 }

@@ -38,6 +38,14 @@ class TaxonomyBuilder
                     $required
                 );
                 break;
+            case fields\FieldType::TEXT:
+                $this->fields[] = new fields\TextField(
+                    $id,
+                    $label,
+                    $required,
+                    $placeholder
+                );
+                break;
         }
         return $this;
     }
