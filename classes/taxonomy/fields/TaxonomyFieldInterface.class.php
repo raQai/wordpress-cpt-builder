@@ -7,6 +7,13 @@ defined('ABSPATH') or die('Nope!');
 interface TaxonomyFieldInterface
 {
     /**
+     * Initialize all necessary actions and filters for this field.
+     *
+     * @param slug (string) The taxonomy slug
+     */
+    public function init($slug);
+
+    /**
      * Simple getter for the term metadata. returns a default value if $term_id is null
      *
      * @param term_id (int) Term ID.

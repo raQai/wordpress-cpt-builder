@@ -74,6 +74,16 @@ abstract class AbstractTaxonomyField implements TaxonomyFieldInterface
         return $render_object;
     }
 
+    public function init($slug)
+    {
+        add_action("{$slug}_add_form_fields", array($this, 'renderFormField'));
+        add_action("created_{$slug}", array($this, 'saveValue'), 10, 2);
+        add_action("{$slug}_edit_form_fields", array($this, 'renderEditFormField'), 10, 2);
+        add_action("edited_{$slug}", array($this, 'updateValue'), 10, 2);
+        add_filter("manage_edit-{$slug}_columns", array($this, 'addTableColumn'));
+        add_filter("manage_{$slug}_custom_column", array($this, 'addTableContent'), 10, 3);
+    }
+
     public function getValue($term_id = null)
     {
         if ($term_id === null) {
