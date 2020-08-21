@@ -7,11 +7,11 @@ defined('ABSPATH') or die('Nope!');
 interface TaxonomyFieldInterface
 {
     /**
-     * Simple getter for the term metadata
+     * Simple getter for the term metadata. returns a default value if $term_id is null
      *
      * @param term_id (int) Term ID.
      */
-    public function getValue($term_id);
+    public function getValue($term_id = null);
 
     /**
      * Fires after a new term in a specific taxonomy is created, and after the term cache has been cleaned.
