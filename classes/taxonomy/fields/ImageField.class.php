@@ -53,12 +53,12 @@ class ImageField extends AbstractTaxonomyField
         if (!did_action('wp_enqueue_media')) {
             wp_enqueue_media();
         }
-        if (!wp_script_is('media-uploader')) {
+        if (!wp_script_is('biws-media-uploader')) {
             wp_enqueue_script(
-                'media-uploader',
-                BIWS_EventManager__PLUGIN_DIR_URL . 'public/js/jquery.media-uploader-0.0.1.js',
+                'biws-media-uploader',
+                BIWS_EventManager__PLUGIN_DIR_URL . 'public/js/jquery.biws.media-uploader-0.1.0.js',
                 array('jquery'),
-                '0.0.1',
+                '0.1.0',
                 true
             );
         }
