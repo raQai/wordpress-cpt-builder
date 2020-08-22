@@ -29,7 +29,8 @@ abstract class AbstractTaxonomyField implements TaxonomyFieldInterface
         return $this->required;
     }
 
-    function getDefault() {
+    function getDefault()
+    {
         return $this->default;
     }
 
@@ -41,24 +42,38 @@ abstract class AbstractTaxonomyField implements TaxonomyFieldInterface
         $this->default = $default;
     }
 
-    function sanitizePostData($post_data) {
+    function sanitizePostData($post_data)
+    {
         return $post_data;
     }
 
-    function buildRenderObject() {
+    function getLabelTemplatePath()
+    {
+        return BIWS_EventManager__PLUGIN_DIR_PATH . 'includes/templates/fields/FormFieldLabel.inc.php';
+    }
+
+    function getInputTemplatePath()
+    {
+        return BIWS_EventManager__PLUGIN_DIR_PATH . 'includes/templates/fields/FormFieldInput.inc.php';
+    }
+
+    function buildRenderObject()
+    {
         $render_object = (object)(array());
 
         $render_object->id = $this->id;
         $render_object->label = $this->label;
         $render_object->required = $this->required;
 
-        $render_object->classes = array();
-        $render_object->classes[] = "form-field";
-        $render_object->classes[] = "term-{$this->id}-wrap";
-
+        $container_classes = array();
+        $container_classes[] = "form-field";
+        $container_classes[] = "term-{$this->id}-wrap";
         if ($this->required) {
-            $render_object->classes[] = "form-required";
+            $container_classes[] = "form-required";
         }
+
+        $render_object->container_attributes = array();
+        $render_object->container_attributes["class"] = implode(" ", $container_classes);
 
         $render_object->label_attributes = array();
         $render_object->label_attributes["for"] = $this->id;
@@ -70,6 +85,16 @@ abstract class AbstractTaxonomyField implements TaxonomyFieldInterface
         if ($this->default !== null) {
             $render_object->input_attributes["value"] = $this->getValue();
         }
+
+        $render_object->label_template = $this->getLabelTemplatePath();
+        $render_object->input_template = $this->getInputTemplatePath();
+
+        return $render_object;
+    }
+
+    function buildEditRenderObject($term, $slug) {
+        $render_object = $this->buildRenderObject();
+        $render_object->input_attributes["value"] = $this->getValue($term->term_id);
 
         return $render_object;
     }
@@ -131,19 +156,19 @@ abstract class AbstractTaxonomyField implements TaxonomyFieldInterface
 
     public function renderFormField($slug)
     {
-        ob_start();
         $render_object = $this->buildRenderObject();
-        include BIWS_EventManager__PLUGIN_DIR_PATH . 'includes/templates/taxonomy/fields/FormFieldTemplate.inc.php';
+
+        ob_start();
+        include BIWS_EventManager__PLUGIN_DIR_PATH . 'includes/templates/fields/taxonomy/TaxonomyFormField.inc.php';
         ob_end_flush();
     }
 
     public function renderEditFormField($term, $slug)
     {
-        ob_start();
-        $render_object = $this->buildRenderObject();
-        $render_object->input_attributes["value"] = $this->getValue($term->term_id);
+        $render_object = $this->buildEditRenderObject($term, $slug);
 
-        include BIWS_EventManager__PLUGIN_DIR_PATH . 'includes/templates/taxonomy/fields/EditFormFieldTemplate.inc.php';
+        ob_start();
+        include BIWS_EventManager__PLUGIN_DIR_PATH . 'includes/templates/fields/taxonomy/TaxonomyEditFormField.inc.php';
         ob_end_flush();
     }
 

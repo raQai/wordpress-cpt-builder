@@ -14,11 +14,30 @@ class ImageField extends AbstractTaxonomyField
         );
     }
 
+    function getInputTemplatePath()
+    {
+        return BIWS_EventManager__PLUGIN_DIR_PATH . 'includes/templates/fields/ImageFormFieldInput.inc.php';
+    }
+
     function buildRenderObject()
     {
         $render_object = parent::buildRenderObject();
+        $render_object->container_attributes["id"] = $this->getId() . '_media-selector';
         $render_object->input_attributes["type"] = "hidden";
+        $render_object->has_image_set = false;
         // TODO define
+        return $render_object;
+    }
+
+    function buildEditRenderObject($term, $slug)
+    {
+        $image_id = parent::getValue($term->term_id);
+        $render_object = $this->buildRenderObject();
+        $render_object->input_attributes["value"] = $image_id;
+        $render_object->has_image_set = $image_id;
+        if ($image_id) {
+            $render_object->attachment_image = wp_get_attachment_image($image_id, 'thumbnail');
+        }
         return $render_object;
     }
 
@@ -50,29 +69,7 @@ class ImageField extends AbstractTaxonomyField
         $script_object = (object)(array());
         $script_object->id = $this->getId();
         ob_start();
-        include BIWS_EventManager__PLUGIN_DIR_PATH . 'includes/scripts/taxonomy/fields/MediaUploaderScript.inc.php';
-        ob_end_flush();
-    }
-
-    public function renderFormField($slug)
-    {
-        $render_object = $this->buildRenderObject();
-        ob_start();
-        include BIWS_EventManager__PLUGIN_DIR_PATH . 'includes/templates/taxonomy/fields/ImageFieldTemplate.inc.php';
-        ob_end_flush();
-    }
-
-    public function renderEditFormField($term, $slug)
-    {
-        $image_id = parent::getValue($term->term_id);
-        $render_object = $this->buildRenderObject();
-        $render_object->input_attributes["value"] = $image_id;
-        $render_object->has_image_set = $image_id;
-        if ($image_id) {
-            $render_object->attachment_image = wp_get_attachment_image($image_id, 'thumbnail');
-        }
-        ob_start();
-        include BIWS_EventManager__PLUGIN_DIR_PATH . 'includes/templates/taxonomy/fields/EditImageFieldTemplate.inc.php';
+        include BIWS_EventManager__PLUGIN_DIR_PATH . 'includes/scripts/MediaUploaderScript.inc.php';
         ob_end_flush();
     }
 
