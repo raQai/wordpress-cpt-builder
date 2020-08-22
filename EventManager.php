@@ -4,7 +4,7 @@
  * Plugin Name: Event Manager
  * Description: Simple EventManager Plugin
  * Author: Patrick Bogdan
- * Version: 0.2.6
+ * Version: 0.2.7
  */
 
 namespace BIWS\EventManager;
@@ -16,6 +16,7 @@ if (!defined('WPINC')) {
 }
 
 define('BIWS_EventManager__PLUGIN_DIR_PATH', plugin_dir_path(__FILE__));
+define('BIWS_EventManager__PLUGIN_DIR_URL', plugin_dir_url(__FILE__));
 
 include BIWS_EventManager__PLUGIN_DIR_PATH . 'includes/autoloader.inc.php';
 
@@ -69,6 +70,7 @@ $tags_taxonomy = taxonomy\TaxonomyBuilder::create("taxonomyExample")
     ->addField(taxonomy\fields\FieldType::NUMBER, 'order', 'Order#', true, 0)
     ->addField(taxonomy\fields\FieldType::TEXT, 'texttest', 'TextTest', true, "", 'text placeholder')
     ->addField(taxonomy\fields\FieldType::COLOR, 'testcolor', 'ColorTest', true, '#a1a1b0')
+    ->addField(taxonomy\fields\FieldType::IMAGE, 'testimage', 'TestImage', true)
     ->build();
 
 $testMetaBox = metabox\MetaBoxBuilder::create("testbox")

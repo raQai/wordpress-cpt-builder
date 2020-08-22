@@ -15,6 +15,7 @@ interface TaxonomyFieldInterface
 
     /**
      * Simple getter for the term metadata. returns a default value if $term_id is null
+     * or false if no value was set
      *
      * @param term_id (int) Term ID.
      */

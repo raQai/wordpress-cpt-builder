@@ -56,6 +56,14 @@ class TaxonomyBuilder
                     $default
                 );
                 break;
+            case fields\FieldType::IMAGE:
+                $this->fields[] = new fields\ImageField(
+                    $id,
+                    $label,
+                    $required,
+                    $default
+                );
+                break;
         }
         return $this;
     }
