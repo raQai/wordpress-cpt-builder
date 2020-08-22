@@ -1,3 +1,9 @@
+/**
+ * Custom Media Uploader plugin for WordPress using jQuery.
+ * Inspired by the wordpress codex and added to this plugin for easier access of the media uploader.
+ *
+ * @see https://codex.wordpress.org/Javascript_Reference/wp.media
+ */
 (function ($) {
     $.fn.biws = function () {
         const jq = this;
