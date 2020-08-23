@@ -4,7 +4,7 @@
  * Plugin Name: Event Manager
  * Description: Simple EventManager Plugin
  * Author: Patrick Bogdan
- * Version: 0.3.0
+ * Version: 0.3.1
  */
 
 namespace BIWS\EventManager;
@@ -77,14 +77,16 @@ $tags_taxonomy = TaxonomyBuilder::create("taxonomyExample")
     ->addField(FieldType::IMAGE, 'testimage', 'TestImage')
     ->build();
 
-$testMetaBox = MetaBoxBuilder::create("testbox")
+$test_meta_box = MetaBoxBuilder::create("testbox")
     ->title("test meta box title")
     ->context("side")
     ->priority("high")
+    ->addField(FieldType::NUMBER, 'testmeta_number', 'number test', 0)
+    ->addField(FieldType::NUMBER, 'testmeta_number-2', 'number test 2', 2)
     ->build();
 
 CustomPostTypeBuilder::create("events")
     ->args($events_args)
     ->addTaxonomy($tags_taxonomy)
-    ->addMetaBox($testMetaBox)
+    ->addMetaBox($test_meta_box)
     ->buildAndInit();

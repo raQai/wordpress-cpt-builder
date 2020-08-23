@@ -3,6 +3,7 @@
 namespace BIWS\EventManager\metabox;
 
 use BIWS\EventManager\fields\FieldType;
+use BIWS\EventManager\fields\metabox\NumberField;
 use InvalidArgumentException;
 
 defined('ABSPATH') or die('Nope!');
@@ -53,6 +54,9 @@ class MetaBoxBuilder
     public function addField($type, $id, $label, $default = null)
     {
         switch ($type) {
+            case FieldType::NUMBER:
+                $this->fields[] = new NumberField($id, $label, $default);
+                break;
             default:
                 throw new InvalidArgumentException('FieldType not supported for taxonomies. FieldType = ' . $type);
         }
