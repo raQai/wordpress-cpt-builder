@@ -15,9 +15,9 @@ class TaxonomyBuilder
 {
     private $slug;
 
-    private $args;
+    private $args = array();
 
-    private $fields;
+    private $fields = array();
 
     private function __construct($slug)
     {
