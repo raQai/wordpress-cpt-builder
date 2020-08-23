@@ -2,6 +2,7 @@
 
 namespace BIWS\EventManager\taxonomy\fields;
 
+use BIWS\EventManager\Scripts;
 use BIWS\EventManager\Templates;
 
 defined('ABSPATH') or die('Nope!');
@@ -46,33 +47,22 @@ class ImageField extends AbstractTaxonomyField
     public function init($slug)
     {
         parent::init($slug);
-        add_action('admin_enqueue_scripts', array($this, 'loadMediaScripts'));
-        add_action('admin_footer', array($this, 'addScript'));
-    }
 
-    public function loadMediaScripts()
-    {
-        if (!did_action('wp_enqueue_media')) {
-            wp_enqueue_media();
-        }
-        if (!wp_script_is('biws-media-uploader')) {
-            wp_enqueue_script(
-                'biws-media-uploader',
-                BIWS_EventManager__PLUGIN_DIR_URL . 'public/js/jquery.biws.media-uploader-0.1.0.js',
-                array('jquery'),
-                '0.1.0',
-                true
-            );
-        }
-    }
+        $inputSelector = '#' . $this->getId();
+        $containerSelector = $inputSelector . '_media-selector';
+        $imageContainerSelector = $inputSelector . '_media_container';
+        $setImageLinkSelector = $inputSelector . '_media-button';
+        $removeImageLinkSelector = $inputSelector . '_media-remove';
 
-    public function addScript()
-    {
-        $script_object = (object)(array());
-        $script_object->id = $this->getId();
-        ob_start();
-        include BIWS_EventManager__PLUGIN_DIR_PATH . 'includes/scripts/MediaUploaderScript.inc.php';
-        ob_end_flush();
+        Scripts::enqueueMediaUploaderScript(
+            'admin_enqueue_scripts',
+            'admin_footer',
+            $containerSelector,
+            $inputSelector,
+            $imageContainerSelector,
+            $setImageLinkSelector,
+            $removeImageLinkSelector
+        );
     }
 
     public function addTableColumn($columns)
