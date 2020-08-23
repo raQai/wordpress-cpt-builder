@@ -2,6 +2,9 @@
 
 namespace BIWS\EventManager\metabox;
 
+use BIWS\EventManager\fields\FieldType;
+use InvalidArgumentException;
+
 defined('ABSPATH') or die('Nope!');
 
 class MetaBoxBuilder
@@ -10,7 +13,8 @@ class MetaBoxBuilder
     private $title;
     private $context;
     private $priority;
-    private $args;
+    private $args = array();
+    private $fields = array();
 
     private function __construct($id)
     {
@@ -46,6 +50,15 @@ class MetaBoxBuilder
         return $this;
     }
 
+    public function addField($type, $id, $label, $default = null)
+    {
+        switch ($type) {
+            default:
+                throw new InvalidArgumentException('FieldType not supported for taxonomies. FieldType = ' . $type);
+        }
+        return $this;
+    }
+
     public function build()
     {
         return new MetaBox(
@@ -53,7 +66,8 @@ class MetaBoxBuilder
             $this->title,
             $this->context,
             $this->priority,
-            $this->args
+            $this->args,
+            $this->fields
         );
     }
 }
