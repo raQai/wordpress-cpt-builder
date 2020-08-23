@@ -70,7 +70,7 @@ $tags_taxonomy = taxonomy\TaxonomyBuilder::create("taxonomyExample")
     ->addField(taxonomy\fields\FieldType::NUMBER, 'order', 'Order#', true, 0)
     ->addField(taxonomy\fields\FieldType::TEXT, 'texttest', 'TextTest', true, "", 'text placeholder')
     ->addField(taxonomy\fields\FieldType::COLOR, 'testcolor', 'ColorTest', true, '#a1a1b0')
-    ->addField(taxonomy\fields\FieldType::IMAGE, 'testimage', 'TestImage', true)
+    ->addField(taxonomy\fields\FieldType::IMAGE, 'testimage', 'TestImage')
     ->build();
 
 $testMetaBox = metabox\MetaBoxBuilder::create("testbox")

@@ -9,6 +9,12 @@ defined('ABSPATH') or die('Nope!');
 
 class ImageField extends AbstractTaxonomyField
 {
+
+    public function __construct($id, $label, $default)
+    {
+        parent::__construct($id, $label, false, $default);
+    }
+
     function sanitizePostData($post_data)
     {
         return filter_var(
@@ -50,7 +56,7 @@ class ImageField extends AbstractTaxonomyField
 
         $inputSelector = '#' . $this->getId();
         $containerSelector = $inputSelector . '_media-selector';
-        $imageContainerSelector = $inputSelector . '_media_container';
+        $imageContainerSelector = $inputSelector . '_media-container';
         $setImageLinkSelector = $inputSelector . '_media-button';
         $removeImageLinkSelector = $inputSelector . '_media-remove';
 
