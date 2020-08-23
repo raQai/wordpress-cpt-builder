@@ -45,7 +45,7 @@ interface TaxonomyFieldInterface
      * @param string $slug The taxonomy slug.
      * @see https://developer.wordpress.org/reference/hooks/taxonomy_add_form_fields/
      */
-    public function renderFormField($slug);
+    public function renderField($slug);
 
     /**
      * Fires after the Edit Term form fields are displayed.
@@ -54,7 +54,7 @@ interface TaxonomyFieldInterface
      * @param string $slug Current taxonomy slug.
      * @see https://developer.wordpress.org/reference/hooks/taxonomy_edit_form_fields/
      */
-    public function renderEditFormField($term, $slug);
+    public function renderEditField($term, $slug);
 
     /**
      * Filters the column headers for a list table on a specific screen.
