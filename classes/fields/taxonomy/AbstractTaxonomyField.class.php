@@ -138,18 +138,14 @@ abstract class AbstractTaxonomyField implements TaxonomyFieldInterface
     {
         $render_object = $this->buildRenderObject();
 
-        ob_start();
         include Templates::TAXONOMY_FORM_FIELD;
-        ob_end_flush();
     }
 
     public function renderEditField($term, $slug)
     {
         $render_object = $this->buildEditRenderObject($term, $slug);
 
-        ob_start();
         include Templates::TAXONOMY_EDIT_FORM_FIELD;
-        ob_end_flush();
     }
 
     public function addTableColumn($columns)

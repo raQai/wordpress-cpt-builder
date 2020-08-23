@@ -64,16 +64,20 @@ class Taxonomy
      */
     public function renderFields($slug)
     {
+        ob_start();
         foreach ($this->fields as $field) {
             $field->renderField($slug);
         }
+        ob_end_flush();
     }
 
     public function renderEditFields($term, $slug)
     {
+        ob_start();
         foreach ($this->fields as $field) {
             $field->renderEditField($term, $slug);
         }
+        ob_end_flush();
     }
 
     public function addTableColumns($columns)
