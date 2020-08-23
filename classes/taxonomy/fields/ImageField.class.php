@@ -2,6 +2,8 @@
 
 namespace BIWS\EventManager\taxonomy\fields;
 
+use BIWS\EventManager\Templates;
+
 defined('ABSPATH') or die('Nope!');
 
 class ImageField extends AbstractTaxonomyField
@@ -16,7 +18,7 @@ class ImageField extends AbstractTaxonomyField
 
     function getInputTemplatePath()
     {
-        return BIWS_EventManager__PLUGIN_DIR_PATH . 'includes/templates/fields/ImageFormFieldInput.inc.php';
+        return Templates::IMAGE_FIELD_INPUT;
     }
 
     function buildRenderObject()

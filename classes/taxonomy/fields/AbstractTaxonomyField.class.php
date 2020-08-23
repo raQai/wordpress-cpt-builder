@@ -2,6 +2,8 @@
 
 namespace BIWS\EventManager\taxonomy\fields;
 
+use BIWS\EventManager\Templates;
+
 defined('ABSPATH') or die('Nope!');
 
 abstract class AbstractTaxonomyField implements TaxonomyFieldInterface
@@ -49,12 +51,12 @@ abstract class AbstractTaxonomyField implements TaxonomyFieldInterface
 
     function getLabelTemplatePath()
     {
-        return BIWS_EventManager__PLUGIN_DIR_PATH . 'includes/templates/fields/FormFieldLabel.inc.php';
+        return Templates::FORM_FIELD_LABEL;
     }
 
     function getInputTemplatePath()
     {
-        return BIWS_EventManager__PLUGIN_DIR_PATH . 'includes/templates/fields/FormFieldInput.inc.php';
+        return Templates::FORM_FIELD_INPUT;
     }
 
     function buildRenderObject()
@@ -159,7 +161,7 @@ abstract class AbstractTaxonomyField implements TaxonomyFieldInterface
         $render_object = $this->buildRenderObject();
 
         ob_start();
-        include BIWS_EventManager__PLUGIN_DIR_PATH . 'includes/templates/fields/taxonomy/TaxonomyFormField.inc.php';
+        include Templates::TAXONOMY_FORM_FIELD;
         ob_end_flush();
     }
 
@@ -168,7 +170,7 @@ abstract class AbstractTaxonomyField implements TaxonomyFieldInterface
         $render_object = $this->buildEditRenderObject($term, $slug);
 
         ob_start();
-        include BIWS_EventManager__PLUGIN_DIR_PATH . 'includes/templates/fields/taxonomy/TaxonomyEditFormField.inc.php';
+        include Templates::TAXONOMY_EDIT_FORM_FIELD;
         ob_end_flush();
     }
 
