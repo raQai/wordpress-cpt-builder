@@ -4,10 +4,15 @@
  * Plugin Name: Event Manager
  * Description: Simple EventManager Plugin
  * Author: Patrick Bogdan
- * Version: 0.2.8
+ * Version: 0.2.9
  */
 
 namespace BIWS\EventManager;
+
+use BIWS\EventManager\cpt\CustomPostTypeBuilder;
+use BIWS\EventManager\fields\FieldType;
+use BIWS\EventManager\metabox\MetaBoxBuilder;
+use BIWS\EventManager\taxonomy\TaxonomyBuilder;
 
 defined('ABSPATH') or die('Nope!');
 
@@ -41,8 +46,7 @@ $events_args = array(
     'rewrite' => array('slug' => "events"),
 );
 
-
-$tags_taxonomy = taxonomy\TaxonomyBuilder::create("taxonomyExample")
+$tags_taxonomy = TaxonomyBuilder::create("taxonomyExample")
     ->args(
         array(
             'hierarchical' => true,
@@ -67,19 +71,19 @@ $tags_taxonomy = taxonomy\TaxonomyBuilder::create("taxonomyExample")
             'rewrite' => array('slug' => "taxample"),
         )
     )
-    ->addField(taxonomy\fields\FieldType::NUMBER, 'order', 'Order#', true, 0)
-    ->addField(taxonomy\fields\FieldType::TEXT, 'texttest', 'TextTest', true, "", 'text placeholder')
-    ->addField(taxonomy\fields\FieldType::COLOR, 'testcolor', 'ColorTest', true, '#a1a1b0')
-    ->addField(taxonomy\fields\FieldType::IMAGE, 'testimage', 'TestImage')
+    ->addField(FieldType::NUMBER, 'order', 'Order#', true, 0)
+    ->addField(FieldType::TEXT, 'texttest', 'TextTest', true, "", 'text placeholder')
+    ->addField(FieldType::COLOR, 'testcolor', 'ColorTest', true, '#a1a1b0')
+    ->addField(FieldType::IMAGE, 'testimage', 'TestImage')
     ->build();
 
-$testMetaBox = metabox\MetaBoxBuilder::create("testbox")
+$testMetaBox = MetaBoxBuilder::create("testbox")
     ->title("test meta box title")
     ->context("side")
     ->priority("high")
     ->build();
 
-cpt\CustomPostTypeBuilder::create("events")
+CustomPostTypeBuilder::create("events")
     ->args($events_args)
     ->addTaxonomy($tags_taxonomy)
     ->addMetaBox($testMetaBox)

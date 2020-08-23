@@ -1,6 +1,6 @@
 <?php
 
-namespace BIWS\EventManager\taxonomy\fields;
+namespace BIWS\EventManager\fields\taxonomy;
 
 use BIWS\EventManager\Scripts;
 use BIWS\EventManager\Templates;
@@ -34,7 +34,6 @@ class ImageField extends AbstractTaxonomyField
         $render_object->container_attributes["id"] = $this->getId() . '_media-selector';
         $render_object->input_attributes["type"] = "hidden";
         $render_object->has_image_set = false;
-        // TODO define
         return $render_object;
     }
 
@@ -50,9 +49,9 @@ class ImageField extends AbstractTaxonomyField
         return $render_object;
     }
 
-    public function init($slug)
+    public function init()
     {
-        parent::init($slug);
+        parent::init();
 
         $inputSelector = '#' . $this->getId();
         $containerSelector = $inputSelector . '_media-selector';

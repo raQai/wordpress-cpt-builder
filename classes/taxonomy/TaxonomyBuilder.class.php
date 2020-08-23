@@ -2,6 +2,13 @@
 
 namespace BIWS\EventManager\taxonomy;
 
+use BIWS\EventManager\fields\FieldType;
+use BIWS\EventManager\fields\taxonomy\ColorField;
+use BIWS\EventManager\fields\taxonomy\ImageField;
+use BIWS\EventManager\fields\taxonomy\NumberField;
+use BIWS\EventManager\fields\taxonomy\TextField;
+use InvalidArgumentException;
+
 defined('ABSPATH') or die('Nope!');
 
 class TaxonomyBuilder
@@ -31,16 +38,16 @@ class TaxonomyBuilder
     public function addField($type, $id, $label, $required = false, $default = null, $placeholder = '')
     {
         switch ($type) {
-            case fields\FieldType::NUMBER:
-                $this->fields[] = new fields\NumberField(
+            case FieldType::NUMBER:
+                $this->fields[] = new NumberField(
                     $id,
                     $label,
                     $required,
                     $default
                 );
                 break;
-            case fields\FieldType::TEXT:
-                $this->fields[] = new fields\TextField(
+            case FieldType::TEXT:
+                $this->fields[] = new TextField(
                     $id,
                     $label,
                     $required,
@@ -48,17 +55,19 @@ class TaxonomyBuilder
                     $placeholder
                 );
                 break;
-            case fields\FieldType::COLOR:
-                $this->fields[] = new fields\ColorField(
+            case FieldType::COLOR:
+                $this->fields[] = new ColorField(
                     $id,
                     $label,
                     $required,
                     $default
                 );
                 break;
-            case fields\FieldType::IMAGE:
-                $this->fields[] = new fields\ImageField($id, $label, $default);
+            case FieldType::IMAGE:
+                $this->fields[] = new ImageField($id, $label, $default);
                 break;
+            default:
+                throw new InvalidArgumentException('FieldType not supported for taxonomies. FieldType = ' . $type);
         }
         return $this;
     }

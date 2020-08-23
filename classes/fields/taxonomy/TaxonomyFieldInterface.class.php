@@ -1,48 +1,33 @@
 <?php
 
-namespace BIWS\EventManager\taxonomy\fields;
+namespace BIWS\EventManager\fields\taxonomy;
+
+use BIWS\EventManager\fields\FieldInterface;
 
 defined('ABSPATH') or die('Nope!');
 
-interface TaxonomyFieldInterface
+interface TaxonomyFieldInterface extends FieldInterface
 {
     /**
-     * Initialize all necessary actions and filters for this field.
+     * Retrieves metadata for the given $term_id
      *
-     * @param string $slug The taxonomy slug
+     * @param int $term_id
+     * @see https://developer.wordpress.org/reference/functions/get_term_meta/
      */
-    public function init($slug);
-
-    /**
-     * Simple getter for the term metadata.
-     * May return a default value if $term_id is null or false if no value was set
-     *
-     * @param int $term_id Term ID.
-     */
-    public function getValue($term_id = null);
+    public function getValue($term_id);
 
     /**
      * Fires after a new term in a specific taxonomy is created, and after the term cache has been cleaned.
      * 
      * @param int $term_id Term ID.
-     * @param int $tt_id Term taxonomy ID.
      * @see https://developer.wordpress.org/reference/hooks/created_taxonomy/
      */
-    public function saveValue($term_id, $tt_id);
-
-    /**
-     * Fires after a term for a specific taxonomy has been updated, and the term cache has been cleaned.
-     *
-     * @param int $term_id Term ID.
-     * @param int $tt_id Term taxonomy ID.
-     * @see https://developer.wordpress.org/reference/hooks/edited_taxonomy/
-     */
-    public function updateValue($term_id, $tt_id);
+    public function saveValue($term_id);
 
     /**
      * Fires after the Add Term form fields.
-     *
-     * @param string $slug The taxonomy slug.
+     * 
+     * @param string $slug The taxonomy slug
      * @see https://developer.wordpress.org/reference/hooks/taxonomy_add_form_fields/
      */
     public function renderField($slug);

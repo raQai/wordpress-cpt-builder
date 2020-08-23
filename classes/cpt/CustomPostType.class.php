@@ -50,7 +50,7 @@ class CustomPostType
     function duplicateAsDraft()
     {
         global $wpdb;
-        if (!(isset($_GET['post']) || isset($_POST['post'])  || (isset($_REQUEST['action']) && 'duplicateAsDraft' == $_REQUEST['action']))) {
+        if (!(isset($_GET['post']) || isset($_POST['post']) || (isset($_REQUEST['action']) && 'duplicateAsDraft' == $_REQUEST['action']))) {
             wp_die('No post to duplicate has been supplied!');
         }
 

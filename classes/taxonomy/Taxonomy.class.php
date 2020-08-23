@@ -25,15 +25,15 @@ class Taxonomy
             $this->register($post_slug);
         });
 
-        add_action("created_{$this->slug}", array($this, 'saveValues'), 10, 2);
-        add_action("edited_{$this->slug}", array($this, 'updateValues'), 10, 2);
+        add_action("created_{$this->slug}", array($this, 'saveValues'));
+        add_action("edited_{$this->slug}", array($this, 'saveValues'));
         add_action("{$this->slug}_add_form_fields", array($this, 'renderFields'));
         add_action("{$this->slug}_edit_form_fields", array($this, 'renderEditFields'), 10, 2);
         add_filter("manage_edit-{$this->slug}_columns", array($this, 'addTableColumns'));
         add_filter("manage_{$this->slug}_custom_column", array($this, 'addTableContents'), 10, 3);
 
         foreach ($this->fields as $field) {
-            $field->init($this->slug);
+            $field->init();
         }
     }
 
@@ -42,20 +42,26 @@ class Taxonomy
         register_taxonomy($this->slug, $post_slug, $this->args);
     }
 
-    public function saveValues($term_id, $tt_id)
+    /**
+     * Fires after a new term in a specific taxonomy is created, and after the term cache has been cleaned.
+     * 
+     * @param int $term_id Term ID.
+     * @param int $tt_id Term taxonomy ID.
+     * @see https://developer.wordpress.org/reference/hooks/created_taxonomy/
+     */
+    public function saveValues($term_id)
     {
         foreach ($this->fields as $field) {
-            $field->saveValue($term_id, $tt_id);
+            $field->saveValue($term_id);
         }
     }
 
-    public function updateValues($term_id, $tt_id)
-    {
-        foreach ($this->fields as $field) {
-            $field->updateValues($term_id, $tt_id);
-        }
-    }
-
+    /**
+     * Fires after the Add Term form fields.
+     *
+     * @param string $slug The taxonomy slug.
+     * @see https://developer.wordpress.org/reference/hooks/taxonomy_add_form_fields/
+     */
     public function renderFields($slug)
     {
         foreach ($this->fields as $field) {

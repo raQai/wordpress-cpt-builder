@@ -1,6 +1,6 @@
 <?php
 
-namespace BIWS\EventManager\taxonomy\fields;
+namespace BIWS\EventManager\fields;
 
 defined('ABSPATH') or die('Nope!');
 

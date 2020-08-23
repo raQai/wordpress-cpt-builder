@@ -1,6 +1,6 @@
 <?php
 
-namespace BIWS\EventManager\taxonomy\fields;
+namespace BIWS\EventManager\fields\taxonomy;
 
 use BIWS\EventManager\Templates;
 
@@ -85,7 +85,7 @@ abstract class AbstractTaxonomyField implements TaxonomyFieldInterface
         $render_object->input_attributes["id"] = $this->id;
         $render_object->input_attributes["aria-required"] = $this->required ? "true" : "false";
         if ($this->default !== null) {
-            $render_object->input_attributes["value"] = $this->getValue();
+            $render_object->input_attributes["value"] = $this->default;
         }
 
         $render_object->label_template = $this->getLabelTemplatePath();
@@ -101,11 +101,12 @@ abstract class AbstractTaxonomyField implements TaxonomyFieldInterface
         return $render_object;
     }
 
-    public function init($slug)
+    public function init()
     {
+        // no-op
     }
 
-    public function getValue($term_id = null)
+    public function getValue($term_id)
     {
         if ($term_id === null) {
             return $this->default;
@@ -114,24 +115,7 @@ abstract class AbstractTaxonomyField implements TaxonomyFieldInterface
         return get_term_meta($term_id, $this->id, true);
     }
 
-    public function saveValue($term_id, $tt_id)
-    {
-        if (isset($_POST[$this->id]) && '' !== $_POST[$this->id]) {
-            add_term_meta(
-                $term_id,
-                $this->id,
-                $this->sanitizePostData($_POST[$this->id])
-            );
-        } else if ($this->default !== null) {
-            add_term_meta(
-                $term_id,
-                $this->id,
-                $this->sanitizePostData($this->default)
-            );
-        }
-    }
-
-    public function updateValue($term_id, $tt_id)
+    public function saveValue($term_id)
     {
         if (isset($_POST[$this->id]) && '' !== $_POST[$this->id]) {
             update_term_meta(
