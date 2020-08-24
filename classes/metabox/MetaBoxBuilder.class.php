@@ -4,6 +4,7 @@ namespace BIWS\EventManager\metabox;
 
 use BIWS\EventManager\fields\FieldType;
 use BIWS\EventManager\fields\metabox\NumberField;
+use BIWS\EventManager\fields\metabox\TextField;
 use InvalidArgumentException;
 
 defined('ABSPATH') or die('Nope!');
@@ -51,14 +52,17 @@ class MetaBoxBuilder
         return $this;
     }
 
-    public function addField($type, $id, $label, $default = null)
+    public function addField($type, $id, $label, $default = null, $placeholder = '')
     {
         switch ($type) {
             case FieldType::NUMBER:
                 $this->fields[] = new NumberField($id, $label, $default);
                 break;
+            case FieldType::TEXT:
+                $this->fields[] = new TextField($id, $label, $default, $placeholder);
+                break;
             default:
-                throw new InvalidArgumentException('FieldType not supported for taxonomies. FieldType = ' . $type);
+                throw new InvalidArgumentException('FieldType not supported for MetaBoxes. FieldType = ' . $type);
         }
         return $this;
     }
