@@ -93,3 +93,25 @@ CustomPostTypeBuilder::create("events")
     ->addTaxonomy($tags_taxonomy)
     ->addMetaBox($test_meta_box)
     ->buildAndInit();
+
+/**
+ * DEV_MODE_SETTINGS
+ */
+function overwrite_error_log()
+{
+    ini_set('error_log', '/dev/stdout'); // phpcs:ignore
+}
+add_action('init', function () {
+    overwrite_error_log();
+}, 10);
+
+if (!function_exists('write_log')) {
+    function write_log($log)
+    {
+        if (is_array($log) || is_object($log)) {
+            error_log(print_r($log, true));
+        } else {
+            error_log($log);
+        }
+    }
+}
