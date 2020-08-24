@@ -7,6 +7,7 @@ use BIWS\EventManager\fields\metabox\CheckBoxField;
 use BIWS\EventManager\fields\metabox\DateField;
 use BIWS\EventManager\fields\metabox\NumberField;
 use BIWS\EventManager\fields\metabox\TextField;
+use BIWS\EventManager\fields\metabox\TimeField;
 use InvalidArgumentException;
 
 defined('ABSPATH') or die('Nope!');
@@ -68,6 +69,9 @@ class MetaBoxBuilder
                 break;
             case FieldType::DATE:
                 $this->fields[] = new DateField($id, $label);
+                break;
+            case FieldType::TIME:
+                $this->fields[] = new TimeField($id, $label);
                 break;
             default:
                 throw new InvalidArgumentException('FieldType not supported for MetaBoxes. FieldType = ' . $type);

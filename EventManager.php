@@ -4,7 +4,7 @@
  * Plugin Name: Event Manager
  * Description: Simple EventManager Plugin
  * Author: Patrick Bogdan
- * Version: 0.3.6
+ * Version: 0.3.7
  */
 
 namespace BIWS\EventManager;
@@ -85,6 +85,7 @@ $test_meta_box = MetaBoxBuilder::create("testbox")
     ->addField(FieldType::TEXT, 'texttest', 'TextTest', 'text placeholder')
     ->addField(FieldType::CHECKBOX, 'checkbox_test_0', 'CheckBoxTest inactive')
     ->addField(FieldType::DATE, 'datetest', 'DateTest')
+    ->addField(FieldType::TIME, 'timetest', 'TimeTest')
     ->build();
 
 CustomPostTypeBuilder::create("events")

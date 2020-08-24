@@ -12,4 +12,5 @@ abstract class FieldType
     const IMAGE = 3;
     const CHECKBOX = 4;
     const DATE = 5;
+    const TIME = 6;
 }
