@@ -26,7 +26,10 @@ class CheckBoxField extends AbstractMetaBoxField
         $render_object = parent::buildRenderObject($post);
         $render_object->label_attributes["class"] = "components-checkbox-control__label";
         $render_object->input_attributes["type"] = "checkbox";
-        //FIXME cannot use basic ui class because it avoids checking the checkbox (probably needs to add script)
+        /**
+         * FIXME cannot use basic ui class because it avoids checking the checkbox (probably needs to add script)
+         *@see https://wordpress.org/support/topic/custom-meta-box-checkbox-ui-not-updating/
+         */
         //$render_object->input_attributes["class"] = "components-checkbox-control__input";
         $render_object->input_attributes['value'] = 1;
         if ($this->getValue($post->ID)) {
