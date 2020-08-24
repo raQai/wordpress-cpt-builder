@@ -101,7 +101,7 @@ abstract class AbstractMetaBoxField implements MetaBoxFieldInterface
         }
 
         if (isset($_POST[$this->id]) && '' !== $_POST[$this->id]) {
-            $res = update_post_meta(
+            update_post_meta(
                 $post_id,
                 $this->id,
                 $this->sanitizePostData($_POST[$this->id])
@@ -121,8 +121,6 @@ abstract class AbstractMetaBoxField implements MetaBoxFieldInterface
     {
         $render_object = $this->buildRenderObject($post);
 
-        ob_start();
         include Templates::TAXONOMY_FORM_FIELD;
-        ob_end_flush();
     }
 }
