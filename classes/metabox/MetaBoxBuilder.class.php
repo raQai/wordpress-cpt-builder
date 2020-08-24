@@ -53,17 +53,17 @@ class MetaBoxBuilder
         return $this;
     }
 
-    public function addField($type, $id, $label, $default = null, $placeholder = '')
+    public function addField($type, $id, $label, $placeholder = '')
     {
         switch ($type) {
             case FieldType::NUMBER:
-                $this->fields[] = new NumberField($id, $label, $default);
+                $this->fields[] = new NumberField($id, $label);
                 break;
             case FieldType::TEXT:
-                $this->fields[] = new TextField($id, $label, $default, $placeholder);
+                $this->fields[] = new TextField($id, $label, $placeholder);
                 break;
             case FieldType::CHECKBOX:
-                $this->fields[] = new CheckBoxField($id, $label, $default);
+                $this->fields[] = new CheckBoxField($id, $label);
                 break;
             default:
                 throw new InvalidArgumentException('FieldType not supported for MetaBoxes. FieldType = ' . $type);

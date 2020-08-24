@@ -12,8 +12,6 @@ abstract class AbstractMetaBoxField implements MetaBoxFieldInterface
 
     private $label;
 
-    private $default;
-
     function getId()
     {
         return $this->id;
@@ -24,16 +22,10 @@ abstract class AbstractMetaBoxField implements MetaBoxFieldInterface
         return $this->label;
     }
 
-    function getDefault()
-    {
-        return $this->default;
-    }
-
-    public function __construct($id, $label, $default)
+    public function __construct($id, $label)
     {
         $this->id = $id;
         $this->label = $label;
-        $this->default = $default;
     }
 
     function sanitizePostData($post_data)
@@ -71,7 +63,9 @@ abstract class AbstractMetaBoxField implements MetaBoxFieldInterface
         $render_object->input_attributes["id"] = $this->id;
 
         $value = $this->getValue($post->ID);
-        $render_object->input_attributes["value"] = $value ? $value : $this->default;
+        if ($value !== false && $value !== null) {
+            $render_object->input_attributes["value"] = $value;
+        }
 
         $render_object->label_template = $this->getLabelTemplatePath();
         $render_object->input_template = $this->getInputTemplatePath();
@@ -86,10 +80,6 @@ abstract class AbstractMetaBoxField implements MetaBoxFieldInterface
 
     public function getValue($post_id)
     {
-        if ($post_id === null) {
-            return $this->default;
-        }
-
         return get_post_meta($post_id, $this->id, true);
     }
 
@@ -105,12 +95,6 @@ abstract class AbstractMetaBoxField implements MetaBoxFieldInterface
                 $post_id,
                 $this->id,
                 $this->sanitizePostData($_POST[$this->id])
-            );
-        } else if ($this->default !== null) {
-            update_post_meta(
-                $post_id,
-                $this->id,
-                $this->sanitizePostData($this->default)
             );
         } else {
             delete_post_meta($post_id, $this->id);
