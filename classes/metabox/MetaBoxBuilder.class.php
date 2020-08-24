@@ -3,6 +3,7 @@
 namespace BIWS\EventManager\metabox;
 
 use BIWS\EventManager\fields\FieldType;
+use BIWS\EventManager\fields\metabox\CheckBoxField;
 use BIWS\EventManager\fields\metabox\NumberField;
 use BIWS\EventManager\fields\metabox\TextField;
 use InvalidArgumentException;
@@ -60,6 +61,9 @@ class MetaBoxBuilder
                 break;
             case FieldType::TEXT:
                 $this->fields[] = new TextField($id, $label, $default, $placeholder);
+                break;
+            case FieldType::CHECKBOX:
+                $this->fields[] = new CheckBoxField($id, $label, $default);
                 break;
             default:
                 throw new InvalidArgumentException('FieldType not supported for MetaBoxes. FieldType = ' . $type);

@@ -10,4 +10,5 @@ abstract class FieldType
     const TEXT = 1;
     const COLOR = 2;
     const IMAGE = 3;
+    const CHECKBOX = 4;
 }
