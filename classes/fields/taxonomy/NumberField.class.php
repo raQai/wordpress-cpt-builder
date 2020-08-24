@@ -16,6 +16,7 @@ class NumberField extends AbstractTaxonomyField
     function buildRenderObject() {
         $render_object = parent::buildRenderObject();
         $render_object->input_attributes["type"] = "number";
+        $render_object->input_attributes["value"] = 0;
         return $render_object;
     }
 }

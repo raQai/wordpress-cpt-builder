@@ -10,9 +10,9 @@ defined('ABSPATH') or die('Nope!');
 class ImageField extends AbstractTaxonomyField
 {
 
-    public function __construct($id, $label, $default)
+    public function __construct($id, $label)
     {
-        parent::__construct($id, $label, false, $default);
+        parent::__construct($id, $label, false);
     }
 
     function sanitizePostData($post_data)

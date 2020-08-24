@@ -4,7 +4,7 @@
  * Plugin Name: Event Manager
  * Description: Simple EventManager Plugin
  * Author: Patrick Bogdan
- * Version: 0.3.4
+ * Version: 0.3.5
  */
 
 namespace BIWS\EventManager;
@@ -71,9 +71,9 @@ $tags_taxonomy = TaxonomyBuilder::create("taxonomyExample")
             'rewrite' => array('slug' => "taxample"),
         )
     )
-    ->addField(FieldType::NUMBER, 'order', 'Order#', true, 0)
-    ->addField(FieldType::TEXT, 'texttest', 'TextTest', true, "", 'text placeholder')
-    ->addField(FieldType::COLOR, 'testcolor', 'ColorTest', true, '#a1a1b0')
+    ->addField(FieldType::NUMBER, 'order', 'Order#', true)
+    ->addField(FieldType::TEXT, 'texttest', 'TextTest', true, 'text placeholder')
+    ->addField(FieldType::COLOR, 'testcolor', 'ColorTest', false, '#a1a1b0')
     ->addField(FieldType::IMAGE, 'testimage', 'TestImage')
     ->build();
 

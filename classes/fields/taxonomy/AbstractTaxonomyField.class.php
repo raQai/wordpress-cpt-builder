@@ -14,8 +14,6 @@ abstract class AbstractTaxonomyField implements TaxonomyFieldInterface
 
     private $required;
 
-    private $default;
-
     function getId()
     {
         return $this->id;
@@ -31,17 +29,11 @@ abstract class AbstractTaxonomyField implements TaxonomyFieldInterface
         return $this->required;
     }
 
-    function getDefault()
-    {
-        return $this->default;
-    }
-
-    public function __construct($id, $label, $required, $default)
+    public function __construct($id, $label, $required)
     {
         $this->id = $id;
         $this->label = $label;
         $this->required = $required;
-        $this->default = $default;
     }
 
     function sanitizePostData($post_data)
@@ -84,9 +76,6 @@ abstract class AbstractTaxonomyField implements TaxonomyFieldInterface
         $render_object->input_attributes["name"] = $this->id;
         $render_object->input_attributes["id"] = $this->id;
         $render_object->input_attributes["aria-required"] = $this->required ? "true" : "false";
-        if ($this->default !== null) {
-            $render_object->input_attributes["value"] = $this->default;
-        }
 
         $render_object->label_template = $this->getLabelTemplatePath();
         $render_object->input_template = $this->getInputTemplatePath();
@@ -108,10 +97,6 @@ abstract class AbstractTaxonomyField implements TaxonomyFieldInterface
 
     public function getValue($term_id)
     {
-        if ($term_id === null) {
-            return $this->default;
-        }
-
         return get_term_meta($term_id, $this->id, true);
     }
 
@@ -122,12 +107,6 @@ abstract class AbstractTaxonomyField implements TaxonomyFieldInterface
                 $term_id,
                 $this->id,
                 $this->sanitizePostData($_POST[$this->id])
-            );
-        } else if ($this->default !== null) {
-            update_term_meta(
-                $term_id,
-                $this->id,
-                $this->sanitizePostData($this->default)
             );
         } else {
             delete_term_meta($term_id, $this->id);

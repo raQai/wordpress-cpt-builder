@@ -35,7 +35,7 @@ class TaxonomyBuilder
         return $this;
     }
 
-    public function addField($type, $id, $label, $required = false, $default = null, $placeholder = '')
+    public function addField($type, $id, $label, $required = false, $obj = null)
     {
         switch ($type) {
             case FieldType::NUMBER:
@@ -43,7 +43,6 @@ class TaxonomyBuilder
                     $id,
                     $label,
                     $required,
-                    $default
                 );
                 break;
             case FieldType::TEXT:
@@ -51,20 +50,18 @@ class TaxonomyBuilder
                     $id,
                     $label,
                     $required,
-                    $default,
-                    $placeholder
+                    $obj
                 );
                 break;
             case FieldType::COLOR:
                 $this->fields[] = new ColorField(
                     $id,
                     $label,
-                    $required,
-                    $default
+                    $obj
                 );
                 break;
             case FieldType::IMAGE:
-                $this->fields[] = new ImageField($id, $label, $default);
+                $this->fields[] = new ImageField($id, $label);
                 break;
             default:
                 throw new InvalidArgumentException('FieldType not supported for taxonomies. FieldType = ' . $type);
