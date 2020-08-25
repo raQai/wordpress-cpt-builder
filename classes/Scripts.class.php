@@ -9,7 +9,7 @@ class Scripts
     private const SCRIPT_PATH = BIWS_EventManager__PLUGIN_DIR_PATH . 'includes/scripts/';
     private const SCRIPT_JS_URL = BIWS_EventManager__PLUGIN_DIR_URL . 'public/js/';
     private const MEDIA_UPLOAD = self::SCRIPT_PATH . 'MediaUploaderScript.inc.php';
-    private const JS_MEDIA_UPLOAD = self::SCRIPT_JS_URL . 'jquery.biws.media-uploader-0.1.0.js';
+    private const JS_MEDIA_UPLOAD = self::SCRIPT_JS_URL . 'biws.media-uploader-0.1.0.js';
 
     public static function enqueueMediaUploaderScript(
         $hook,
