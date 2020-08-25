@@ -29,8 +29,13 @@
             throw new Error('customMediaUploader called with invalid arguments. All settings values must be specified. ' + JSON.stringify(settings));
         }
 
-        let container = document.querySelector(settings.containerSelector),
-            input = container.querySelectorAll(settings.inputSelector),
+        let container = document.querySelector(settings.containerSelector);
+
+        if (!container) {
+            throw new Error('customMediaUploader called for invalid containerSelector ' + settings.containerSelector);
+        }
+
+        let input = container.querySelectorAll(settings.inputSelector),
             imageContainer = container.querySelectorAll(settings.imageContainerSelector),
             setImageLink = container.querySelectorAll(settings.setImageLinkSelector),
             removeImageLink = container.querySelectorAll(settings.removeImageLinkSelector);
