@@ -49,7 +49,7 @@ class ImageField extends AbstractTaxonomyField
         return $render_object;
     }
 
-    public function init($post_slug)
+    public function initWithTaxonomy($post_slug, $taxonomy_slug)
     {
         parent::init($post_slug);
 
@@ -60,6 +60,8 @@ class ImageField extends AbstractTaxonomyField
         $removeImageLinkSelector = $inputSelector . '_media-remove';
 
         Scripts::enqueueMediaUploaderScript(
+            $post_slug,
+            $taxonomy_slug,
             'admin_enqueue_scripts',
             'admin_footer',
             $containerSelector,

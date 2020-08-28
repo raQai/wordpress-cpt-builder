@@ -14,7 +14,29 @@ class Scripts
     private const METABOXES = self::SCRIPT_PATH . 'MetaboxesScript.inc.php';
     private const JS_METABOXES = self::SCRIPT_JS_URL . 'biws.metaboxes-0.1.0.js';
 
+    private static function isLoadScript(
+        $valid_pages = null,
+        $post_slug = null,
+        $taxonomy_slug = null
+    ) {
+        global $pagenow, $typenow, $taxnow;
+
+        if ($valid_pages && !in_array($pagenow, $valid_pages)) {
+            return false;
+        }
+        if ($post_slug && $post_slug != $typenow) {
+            return false;
+        }
+        if ($taxonomy_slug && $taxonomy_slug != $taxnow) {
+            return false;
+        }
+
+        return true;
+    }
+
     public static function enqueueMediaUploaderScript(
+        $post_slug,
+        $taxonomy_slug,
         $hook,
         $location_hook,
         $containerSelector,
@@ -23,7 +45,7 @@ class Scripts
         $setImageLinkSelector,
         $removeImageLinkSelector
     ) {
-        add_action('init', function() {
+        add_action('init', function () {
             if (!wp_script_is('biws-media-uploader', 'registered')) {
                 wp_register_script(
                     'biws-media-uploader',
@@ -34,8 +56,16 @@ class Scripts
                 );
             }
         });
-        add_action($hook, function () {
-            // limit to supported taxonomies
+
+        add_action($hook, function () use ($post_slug, $taxonomy_slug) {
+            if (!self::isLoadScript(
+                array('edit-tags.php', 'term.php'),
+                $post_slug,
+                $taxonomy_slug
+            )) {
+                return;
+            }
+
             if (!did_action('wp_enqueue_media')) {
                 wp_enqueue_media();
             }
@@ -43,13 +73,24 @@ class Scripts
                 wp_enqueue_script('biws-media-uploader');
             }
         });
+
         add_action($location_hook, function () use (
+            $post_slug,
+            $taxonomy_slug,
             $containerSelector,
             $inputSelector,
             $imageContainerSelector,
             $setImageLinkSelector,
             $removeImageLinkSelector
         ) {
+            if (!self::isLoadScript(
+                array('edit-tags.php', 'term.php'),
+                $post_slug,
+                $taxonomy_slug
+            )) {
+                return;
+            }
+
             $script_object = (object)(array());
             $script_object->containerSelector = $containerSelector;
             $script_object->inputSelector = $inputSelector;

@@ -83,7 +83,8 @@ abstract class AbstractTaxonomyField implements TaxonomyFieldInterface
         return $render_object;
     }
 
-    function buildEditRenderObject($term, $slug) {
+    function buildEditRenderObject($term, $slug)
+    {
         $render_object = $this->buildRenderObject();
         $render_object->input_attributes["value"] = $this->getValue($term->term_id);
 
@@ -93,6 +94,11 @@ abstract class AbstractTaxonomyField implements TaxonomyFieldInterface
     public function init($post_slug)
     {
         // no-op
+    }
+
+    public function initWithTaxonomy($post_slug, $taxonomy_slug)
+    {
+        $this->init($post_slug);
     }
 
     public function getValue($term_id)

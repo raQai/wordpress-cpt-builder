@@ -33,7 +33,7 @@ class Taxonomy
         add_filter("manage_{$this->slug}_custom_column", array($this, 'addTableContents'), 10, 3);
 
         foreach ($this->fields as $field) {
-            $field->init($post_slug);
+            $field->initWithTaxonomy($post_slug, $this->slug);
         }
     }
 
