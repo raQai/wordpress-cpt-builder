@@ -4,7 +4,7 @@
  * Plugin Name: Event Manager
  * Description: Simple EventManager Plugin
  * Author: Patrick Bogdan
- * Version: 0.4.1
+ * Version: 0.4.2
  */
 
 namespace BIWS\EventManager;

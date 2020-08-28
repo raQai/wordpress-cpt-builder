@@ -116,11 +116,16 @@ class Scripts
                 );
             }
         });
-        add_action('enqueue_block_editor_assets', function () {
-            // limit to events
+        add_action('enqueue_block_editor_assets', function ($post_slug) {
+            if (!self::isLoadScript(array('post.php'), $post_slug)) {
+                return;
+            }
             wp_enqueue_script('biws-metaboxes');
         });
         add_action('admin_footer', function () use ($post_slug, $meta_boxes) {
+            if (!self::isLoadScript(array('post.php'), $post_slug)) {
+                return;
+            }
             $script_object = (object)(array());
             $script_object->post_slug = $post_slug;
             $script_object->meta_boxes = $meta_boxes;
