@@ -66,11 +66,11 @@
         // hide triggers depending on the selection state of an image
         if (Array.from(input).some(element => element.value)) {
             if (settings.hideTriggers) {
-                setImageLink.forEach(element => hide(element));
-                removeImageLink.forEach(element => show(element));
+                setImageLink.forEach(element => settings.hide(element));
+                removeImageLink.forEach(element => settings.show(element));
             } else {
-                setImageLink.forEach(element => show(element));
-                removeImageLink.forEach(element => hide(element));
+                setImageLink.forEach(element => settings.show(element));
+                removeImageLink.forEach(element => settings.hide(element));
             }
         }
 
