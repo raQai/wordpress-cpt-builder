@@ -2,6 +2,8 @@
 
 namespace BIWS\EventManager\cpt;
 
+use BIWS\EventManager\Scripts;
+
 defined('ABSPATH') or die('Nope!');
 
 class CustomPostType
@@ -31,6 +33,10 @@ class CustomPostType
         }
         foreach ($this->meta_boxes as $meta_box) {
             $meta_box->init($this->slug);
+        }
+
+        if ($this->meta_boxes) {
+            Scripts::enqueueMetaboxesScript($this->slug, $this->meta_boxes);
         }
 
         // event duplication

@@ -4,7 +4,7 @@
  * Plugin Name: Event Manager
  * Description: Simple EventManager Plugin
  * Author: Patrick Bogdan
- * Version: 0.3.10
+ * Version: 0.4.0
  */
 
 namespace BIWS\EventManager;
@@ -79,8 +79,6 @@ $tags_taxonomy = TaxonomyBuilder::create("taxonomyExample")
 
 $test_meta_box = MetaBoxBuilder::create("testbox")
     ->title("test meta box title")
-    ->context("side")
-    ->priority("high")
     ->addField(FieldType::NUMBER, 'testmeta_number', 'number test')
     ->addField(FieldType::TEXT, 'texttest', 'TextTest', 'text placeholder')
     ->addField(FieldType::CHECKBOX, 'checkbox_test_0', 'CheckBoxTest inactive')

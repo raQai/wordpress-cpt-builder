@@ -14,9 +14,4 @@ class Templates
 
     const TAXONOMY_FORM_FIELD = self::TEMPLATE_PATH . 'fields/taxonomy/TaxonomyFormField.inc.php';
     const TAXONOMY_EDIT_FORM_FIELD = self::TEMPLATE_PATH . 'fields/taxonomy/TaxonomyEditFormField.inc.php';
-
-    const META_BOX_FIELD_WRAPPER_START = self::TEMPLATE_PATH . 'fields/metabox/MetaBoxFieldWrapperStart.inc.php';
-    const META_BOX_FIELD_WRAPPER_END = self::TEMPLATE_PATH . 'fields/metabox/MetaBoxFieldWrapperEnd.inc.php';
-    const META_BOX_CHECK_BOX_FORM_FIELD = self::TEMPLATE_PATH . 'fields/metabox/MetaBoxCheckBoxFormField.inc.php';
-    const META_BOX_CHECK_BOX_INPUT = self::TEMPLATE_PATH . 'fields/metabox/MetaBoxCheckBoxFormFieldInput.inc.php';
 }

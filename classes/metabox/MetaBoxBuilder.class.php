@@ -16,8 +16,6 @@ class MetaBoxBuilder
 {
     private $id;
     private $title;
-    private $context;
-    private $priority;
     private $args = array();
     private $fields = array();
 
@@ -34,18 +32,6 @@ class MetaBoxBuilder
     public function title($title)
     {
         $this->title = $title;
-        return $this;
-    }
-
-    public function context($context)
-    {
-        $this->context = $context;
-        return $this;
-    }
-
-    public function priority($priority)
-    {
-        $this->priority = $priority;
         return $this;
     }
 
@@ -84,8 +70,6 @@ class MetaBoxBuilder
         return new MetaBox(
             $this->id,
             $this->title,
-            $this->context,
-            $this->priority,
             $this->args,
             $this->fields
         );

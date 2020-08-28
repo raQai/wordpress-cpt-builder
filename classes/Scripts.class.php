@@ -11,6 +11,9 @@ class Scripts
     private const MEDIA_UPLOAD = self::SCRIPT_PATH . 'MediaUploaderScript.inc.php';
     private const JS_MEDIA_UPLOAD = self::SCRIPT_JS_URL . 'biws.media-uploader-0.1.2.js';
 
+    private const METABOXES = self::SCRIPT_PATH . 'MetaboxesScript.inc.php';
+    private const JS_METABOXES = self::SCRIPT_JS_URL . 'biws.metaboxes-0.1.0.js';
+
     public static function enqueueMediaUploaderScript(
         $hook,
         $location_hook,
@@ -32,6 +35,7 @@ class Scripts
             }
         });
         add_action($hook, function () {
+            // limit to supported taxonomies
             if (!did_action('wp_enqueue_media')) {
                 wp_enqueue_media();
             }
@@ -54,6 +58,33 @@ class Scripts
             $script_object->removeImageLinkSelector = $removeImageLinkSelector;
             ob_start();
             include self::MEDIA_UPLOAD;
+            ob_end_flush();
+        });
+    }
+
+    public static function enqueueMetaboxesScript($post_slug, $meta_boxes)
+    {
+        add_action('init', function () {
+            if (!wp_script_is('biws-metaboxes')) {
+                wp_register_script(
+                    'biws-metaboxes',
+                    self::JS_METABOXES,
+                    array('wp-plugins', 'wp-edit-post', 'wp-element', 'wp-components'),
+                    '0.1.0',
+                    true
+                );
+            }
+        });
+        add_action('enqueue_block_editor_assets', function () {
+            // limit to events
+            wp_enqueue_script('biws-metaboxes');
+        });
+        add_action('admin_footer', function () use ($post_slug, $meta_boxes) {
+            $script_object = (object)(array());
+            $script_object->post_slug = $post_slug;
+            $script_object->meta_boxes = $meta_boxes;
+            ob_start();
+            include self::METABOXES;
             ob_end_flush();
         });
     }

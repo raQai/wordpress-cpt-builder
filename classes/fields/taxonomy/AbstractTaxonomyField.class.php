@@ -90,7 +90,7 @@ abstract class AbstractTaxonomyField implements TaxonomyFieldInterface
         return $render_object;
     }
 
-    public function init()
+    public function init($post_slug)
     {
         // no-op
     }

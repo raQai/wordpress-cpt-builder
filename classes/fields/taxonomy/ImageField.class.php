@@ -49,9 +49,9 @@ class ImageField extends AbstractTaxonomyField
         return $render_object;
     }
 
-    public function init()
+    public function init($post_slug)
     {
-        parent::init();
+        parent::init($post_slug);
 
         $inputSelector = '#' . $this->getId();
         $containerSelector = $inputSelector . '_media-selector';
