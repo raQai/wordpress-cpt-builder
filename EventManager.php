@@ -32,7 +32,7 @@ $events_args = array(
         'name' => __('Events', 'biws-textdomain'),
         'singular_name' => __('Event', 'biws-textdomain'),
     ),
-    'supports' => array('title', 'editor', 'excerpt', 'thumbnail'),
+    'supports' => array('title', 'editor', 'excerpt', 'thumbnail', 'custom-fields'),
     'hierarchical' => true,
     'has_archive' => true,
     'capability_type' => 'page',
