@@ -12,7 +12,7 @@ class Scripts
     private const JS_MEDIA_UPLOAD = self::SCRIPT_JS_URL . 'biws.media-uploader-0.1.2.js';
 
     private const METABOXES = self::SCRIPT_PATH . 'MetaboxesScript.inc.php';
-    private const JS_METABOXES = self::SCRIPT_JS_URL . 'biws.metaboxes-0.1.0.js';
+    private const JS_METABOXES = self::SCRIPT_JS_URL . 'biws.metaboxes-0.1.1.js';
 
     private static function isLoadScript(
         $valid_pages = null,
@@ -111,7 +111,7 @@ class Scripts
                     'biws-metaboxes',
                     self::JS_METABOXES,
                     array('wp-plugins', 'wp-edit-post', 'wp-element', 'wp-components'),
-                    '0.1.0',
+                    '0.1.1',
                     true
                 );
             }
