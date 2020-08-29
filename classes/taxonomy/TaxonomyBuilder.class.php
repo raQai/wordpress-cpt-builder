@@ -47,6 +47,7 @@ class TaxonomyBuilder
                 );
                 break;
             case FieldType::TEXT:
+            case FieldType::EMAIL:
                 $this->fields[] = new TextField(
                     $id,
                     $label,

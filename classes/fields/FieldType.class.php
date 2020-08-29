@@ -13,4 +13,5 @@ abstract class FieldType
     const CHECKBOX = 4;
     const DATE = 5;
     const TIME = 6;
+    const EMAIL = 7;
 }
