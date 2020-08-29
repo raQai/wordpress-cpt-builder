@@ -4,7 +4,7 @@
  * Plugin Name: Event Manager
  * Description: Simple EventManager Plugin
  * Author: Patrick Bogdan
- * Version: 0.6.1
+ * Version: 0.6.2
  */
 
 namespace BIWS\EventManager;
@@ -180,6 +180,7 @@ CustomPostTypeBuilder::create("events")
     ->addTaxonomy($location_taxonomy)
     ->addMetaBox($datetime_meta_box)
     ->addCPT($registration_cpt)
+    ->unsetColumns('date')
     ->buildAndInit();
 
 /**

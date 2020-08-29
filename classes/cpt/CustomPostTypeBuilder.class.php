@@ -16,6 +16,8 @@ class CustomPostTypeBuilder
 
     private $child_cpts = [];
 
+    private $unset_culumns = [];
+
     private function __construct($slug)
     {
         $this->slug = $slug;
@@ -50,6 +52,12 @@ class CustomPostTypeBuilder
         return $this;
     }
 
+    public function unsetColumns()
+    {
+        $this->unset_culumns = func_get_args();
+        return $this;
+    }
+
     public function buildAndInit()
     {
         $cpt = new CustomPostType(
@@ -58,6 +66,7 @@ class CustomPostTypeBuilder
             $this->taxonomies,
             $this->meta_boxes,
             $this->child_cpts,
+            $this->unset_culumns,
         );
         $cpt->init();
         return $cpt;

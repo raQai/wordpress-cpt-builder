@@ -18,13 +18,16 @@ class CustomPostType
 
     private $child_cpts;
 
-    public function __construct($slug, $args, $taxonomies, $meta_boxes, $child_cpts)
+    private $unset_columns;
+
+    public function __construct($slug, $args, $taxonomies, $meta_boxes, $child_cpts, $unset_columns)
     {
         $this->slug = $slug;
         $this->args = $args;
         $this->taxonomies = $taxonomies;
         $this->meta_boxes = $meta_boxes;
         $this->child_cpts = $child_cpts;
+        $this->unset_columns = $unset_columns;
     }
 
     public function getSlug()
@@ -75,6 +78,15 @@ class CustomPostType
                     return $parent_file;
                 });
             }
+        }
+
+        if ($this->unset_columns) {
+            add_filter("manage_{$this->slug}_posts_columns", function ($columns) {
+                foreach ($this->unset_columns as $column) {
+                    unset($columns[$column]);
+                    return $columns;
+                }
+            });
         }
 
         // event duplication
