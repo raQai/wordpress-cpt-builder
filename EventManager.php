@@ -26,11 +26,11 @@ define('BIWS_EventManager__PLUGIN_DIR_URL', plugin_dir_url(__FILE__));
 include BIWS_EventManager__PLUGIN_DIR_PATH . 'includes/autoloader.inc.php';
 
 $registration_args = array(
-    'label' => __('Anmeldungen', 'biws-textdomain'),
-    'description' => __('Anmeldungen', 'biws-textdomain'),
+    'label' => 'Anmeldungen',
+    'description' => 'Anmeldungen',
     'labels' => array(
-        'name' => __('Anmeldungen', 'biws-textdomain'),
-        'singular_name' => __('Anmeldung', 'biws-textdomain'),
+        'name' => 'Anmeldungen',
+        'singular_name' => 'Anmeldung',
     ),
     'supports' => array('title', 'custom-fields'),
     'menu_icon' => 'dashicons-tickets',
@@ -41,11 +41,11 @@ $registration_args = array(
     'exclude_from_search' => true,
 );
 
-$registration_status_taxonomy = TaxonomyBuilder::create("biws__registration_status")
+$registration_status_taxonomy = TaxonomyBuilder::create('biws__status_tax')
     ->args(array(
         'labels' => array(
-            'name' => _x('Anmeldestatus', 'taxonomy general name'),
-            'singular_name' => _x('Anmeldestatus', 'taxonomy singular name'),
+            'name' => 'Anmeldestatus',
+            'singular_name' => 'Anmeldestatus',
         ),
         'hierarchical' => true,
         'description' => 'Anmeldestatus',
@@ -59,7 +59,7 @@ $registration_status_taxonomy = TaxonomyBuilder::create("biws__registration_stat
     ))
     ->build();
 
-$registration_cpt = CustomPostTypeBuilder::create('biws__registration')
+$registration_cpt = CustomPostTypeBuilder::create('biws__reg_cpt')
     ->args($registration_args)
     ->addTaxonomy($registration_status_taxonomy)
     ->buildAndInit();
@@ -83,7 +83,7 @@ $events_args = array(
     'rewrite' => array('slug' => "events"),
 );
 
-$category_taxonomy = TaxonomyBuilder::create('biws__category')
+$category_taxonomy = TaxonomyBuilder::create('biws__cat_tax')
     ->args(
         array(
             'hierarchical' => true,
@@ -108,7 +108,7 @@ $category_taxonomy = TaxonomyBuilder::create('biws__category')
     )
     ->build();
 
-$contact_taxonomy = TaxonomyBuilder::create('biws__contact')
+$contact_taxonomy = TaxonomyBuilder::create('biws__contact_tax')
     ->args(
         array(
             'hierarchical' => true,
@@ -135,7 +135,7 @@ $contact_taxonomy = TaxonomyBuilder::create('biws__contact')
     ->addField(FieldType::EMAIL, 'email', 'E-Mail', true, true, 'name@domain.de')
     ->build();
 
-$location_taxonomy = TaxonomyBuilder::create('biws__location')
+$location_taxonomy = TaxonomyBuilder::create('biws__location_tax')
     ->args(
         array(
             'hierarchical' => true,
@@ -165,12 +165,18 @@ $location_taxonomy = TaxonomyBuilder::create('biws__location')
     ->addField(FieldType::TEXT, 'location', 'Ort', false, true)
     ->build();
 
-$datetime_meta_box = MetaBoxBuilder::create("biws__datetime")
+$datetime_meta_box = MetaBoxBuilder::create('biws__datetime_meta')
     ->title('Zeitangaben')
-    ->addField(FieldType::DATE, 'start_date', 'Anfangsdatum', true)
-    ->addField(FieldType::DATE, 'end_date', 'Enddatum', true)
-    ->addField(FieldType::TIME, 'start_time', 'Uhrzeit von', true)
-    ->addField(FieldType::TIME, 'end_time', 'Uhrzeit bis', true)
+    ->addField(FieldType::DATE, 'datetime__start_date', 'Anfangsdatum', true)
+    ->addField(FieldType::DATE, 'datetime__end_date', 'Enddatum', true)
+    ->addField(FieldType::TIME, 'datetime__start_time', 'Uhrzeit von', true)
+    ->addField(FieldType::TIME, 'datetime__end_time', 'Uhrzeit bis', true)
+    ->build();
+
+$registration_meta_box = MetaBoxBuilder::create("biws__reg_meta")
+    ->title('Anmeldung')
+    ->addField(FieldType::CHECKBOX, 'registration__enable', 'Anmeldeformular anzeigen', true)
+    ->addField(FieldType::DATE, 'registration__enddate', 'Anmeldung bis', true)
     ->build();
 
 CustomPostTypeBuilder::create("events")
@@ -179,6 +185,7 @@ CustomPostTypeBuilder::create("events")
     ->addTaxonomy($contact_taxonomy)
     ->addTaxonomy($location_taxonomy)
     ->addMetaBox($datetime_meta_box)
+    ->addMetaBox($registration_meta_box)
     ->addCPT($registration_cpt)
     ->unsetColumns('date')
     ->buildAndInit();
