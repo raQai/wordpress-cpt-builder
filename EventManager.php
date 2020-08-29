@@ -4,7 +4,7 @@
  * Plugin Name: Event Manager
  * Description: Simple EventManager Plugin
  * Author: Patrick Bogdan
- * Version: 0.5.0
+ * Version: 0.6.0
  */
 
 namespace BIWS\EventManager;
@@ -108,19 +108,20 @@ $tags_taxonomy = TaxonomyBuilder::create("taxonomyExample")
             'rewrite' => array('slug' => "taxample"),
         )
     )
-    ->addField(FieldType::NUMBER, 'order', 'Order#', true)
-    ->addField(FieldType::TEXT, 'texttest', 'TextTest', true, 'text placeholder')
-    ->addField(FieldType::COLOR, 'testcolor', 'ColorTest', false, '#a1a1b0')
+    ->addField(FieldType::NUMBER, 'order', 'Order#', true, true)
+    ->addField(FieldType::NUMBER, 'order', 'hidden Nr#', false, false)
+    ->addField(FieldType::TEXT, 'texttest', 'TextTest', false, true, 'text placeholder')
+    ->addField(FieldType::COLOR, 'testcolor', 'ColorTest', false, true, '#a1a1b0')
     ->addField(FieldType::IMAGE, 'testimage', 'TestImage')
     ->build();
 
 $test_meta_box = MetaBoxBuilder::create("testbox")
     ->title("test meta box title")
-    ->addField(FieldType::NUMBER, 'testmeta_number', 'number test')
-    ->addField(FieldType::TEXT, 'texttest', 'TextTest', 'text placeholder')
-    ->addField(FieldType::CHECKBOX, 'checkbox_test_0', 'CheckBoxTest inactive')
-    ->addField(FieldType::DATE, 'datetest', 'DateTest')
-    ->addField(FieldType::TIME, 'timetest', 'TimeTest')
+    ->addField(FieldType::NUMBER, 'testmeta_number', 'number test', true)
+    ->addField(FieldType::TEXT, 'texttest', 'TextTest', true, 'text placeholder')
+    ->addField(FieldType::CHECKBOX, 'checkbox_test_0', 'CheckBoxTest inactive', true)
+    ->addField(FieldType::DATE, 'datetest', 'DateTest', true)
+    ->addField(FieldType::TIME, 'timetest', 'TimeTest', true)
     ->build();
 
 CustomPostTypeBuilder::create("events")

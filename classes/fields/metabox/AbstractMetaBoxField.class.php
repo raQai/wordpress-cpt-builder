@@ -12,6 +12,8 @@ abstract class AbstractMetaBoxField implements MetaBoxFieldInterface
 
     private $label;
 
+    private $show_in_column;
+
     function getId()
     {
         return $this->id;
@@ -22,11 +24,17 @@ abstract class AbstractMetaBoxField implements MetaBoxFieldInterface
         return $this->label;
     }
 
-    function __construct($type, $id, $label)
+    function isShowInColumn()
+    {
+        return $this->show_in_column;
+    }
+
+    function __construct($type, $id, $label, $show_in_column)
     {
         $this->type = $type;
         $this->id = $id;
         $this->label = $label;
+        $this->show_in_column = $show_in_column;
     }
 
     function init($post_slug)
@@ -36,5 +44,26 @@ abstract class AbstractMetaBoxField implements MetaBoxFieldInterface
             'single' => true,
             'type' => $this->type,
         ));
+    }
+
+    public function getValue($post_id)
+    {
+        return get_post_meta($post_id, $this->id, true);
+    }
+
+    public function addTableColumn($columns)
+    {
+        if ($this->show_in_column) {
+            $columns[$this->id] = $this->label;
+        }
+        return $columns;
+    }
+
+    public function addTableContent($column_name, $post_id)
+    {
+        if ($this->show_in_column && $column_name == $this->id) {
+            $val = $this->getValue($post_id);
+            echo $val !== null && $val !== '' ? $val : '--';
+        }
     }
 }

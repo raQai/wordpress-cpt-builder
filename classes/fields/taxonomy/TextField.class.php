@@ -8,9 +8,9 @@ class TextField extends AbstractTaxonomyField
 {
     private $placeholder;
 
-    public function __construct($id, $label, $required, $placeholder)
+    public function __construct($id, $label, $required, $show_in_column, $placeholder)
     {
-        parent::__construct($id, $label, $required);
+        parent::__construct($id, $label, $required, $show_in_column);
         $this->placeholder = $placeholder;
     }
 

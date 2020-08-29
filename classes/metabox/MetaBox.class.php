@@ -26,6 +26,8 @@ class MetaBox
         foreach ($this->fields as $field) {
             $field->init($post_slug);
         }
+        add_filter("manage_{$post_slug}_posts_columns", array($this, 'addTableColumns'));
+        add_filter("manage_{$post_slug}_posts_custom_column", array($this, 'addTableContents'), 10, 2);
     }
 
     public function renderForScript() {
@@ -34,5 +36,21 @@ class MetaBox
             $string .= $field->renderForScript();
         }
         return $string;
+    }
+
+    public function addTableColumns($columns)
+    {
+        foreach ($this->fields as $field) {
+            $columns = $field->addTableColumn($columns);
+        }
+        return $columns;
+    }
+
+    public function addTableContents($column_name, $post_id)
+    {
+        foreach ($this->fields as $field) {
+            $content = $field->addTableContent($column_name, $post_id);
+        }
+        return $content;
     }
 }

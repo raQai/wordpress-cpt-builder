@@ -45,7 +45,7 @@ interface TaxonomyFieldInterface extends FieldInterface
      * Filters the column headers for a list table on a specific screen.
      *
      * @param string[] $columns The column header labels keyed by column ID.
-     * @see https://developer.wordpress.org/reference/hooks/manage_screen-id_columns/
+     * @see https://codex.wordpress.org/Plugin_API/Filter_Reference/manage_$taxonomy_id_columns
      */
     public function addTableColumn($columns);
 

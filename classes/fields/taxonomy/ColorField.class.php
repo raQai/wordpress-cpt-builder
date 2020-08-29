@@ -8,9 +8,9 @@ class ColorField extends AbstractTaxonomyField
 {
     private $default;
 
-    public function __construct($id, $label, $default)
+    public function __construct($id, $label, $show_in_columns, $default)
     {
-        parent::__construct($id, $label, false);
+        parent::__construct($id, $label, false, $show_in_columns);
         $this->default = $default;
     }
 
@@ -43,8 +43,8 @@ class ColorField extends AbstractTaxonomyField
 
     public function addTableContent($content, $column_name, $term_id)
     {
-        if ($column_name === $this->getId()) {
-            $color = parent::getValue($term_id);
+        if ($this->isShwoInColumn() && $column_name == $this->getId()) {
+            $color = $this->getValue($term_id);
             return $content . '<code style="background-color:' . $color . ';color:#fff;padding:.3rem.8rem;display:inline-block;border-radius:6px;">' . $color . '</code>';
         }
         return $content;

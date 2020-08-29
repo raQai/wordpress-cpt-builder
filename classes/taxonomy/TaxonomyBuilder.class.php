@@ -35,7 +35,7 @@ class TaxonomyBuilder
         return $this;
     }
 
-    public function addField($type, $id, $label, $required = false, $obj = null)
+    public function addField($type, $id, $label, $required = false, $show_in_column = false, $obj = null)
     {
         switch ($type) {
             case FieldType::NUMBER:
@@ -43,6 +43,7 @@ class TaxonomyBuilder
                     $id,
                     $label,
                     $required,
+                    $show_in_column,
                 );
                 break;
             case FieldType::TEXT:
@@ -50,6 +51,7 @@ class TaxonomyBuilder
                     $id,
                     $label,
                     $required,
+                    $show_in_column,
                     $obj
                 );
                 break;
@@ -57,6 +59,7 @@ class TaxonomyBuilder
                 $this->fields[] = new ColorField(
                     $id,
                     $label,
+                    $show_in_column,
                     $obj
                 );
                 break;

@@ -8,9 +8,9 @@ class TextField extends AbstractMetaBoxField
 {
     private $placeholder;
 
-    public function __construct($id, $label, $placeholder)
+    public function __construct($id, $label, $show_in_column, $placeholder)
     {
-        parent::__construct('string', $id, $label);
+        parent::__construct('string', $id, $label, $show_in_column);
         $this->placeholder = $placeholder;
     }
 

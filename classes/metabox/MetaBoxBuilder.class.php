@@ -41,23 +41,23 @@ class MetaBoxBuilder
         return $this;
     }
 
-    public function addField($type, $id, $label, $placeholder = '')
+    public function addField($type, $id, $label, $show_in_column = false, $placeholder = '')
     {
         switch ($type) {
             case FieldType::NUMBER:
-                $this->fields[] = new NumberField($id, $label);
+                $this->fields[] = new NumberField($id, $label, $show_in_column);
                 break;
             case FieldType::TEXT:
-                $this->fields[] = new TextField($id, $label, $placeholder);
+                $this->fields[] = new TextField($id, $label, $show_in_column, $placeholder);
                 break;
             case FieldType::CHECKBOX:
-                $this->fields[] = new CheckBoxField($id, $label);
+                $this->fields[] = new CheckBoxField($id, $label, $show_in_column);
                 break;
             case FieldType::DATE:
-                $this->fields[] = new DateField($id, $label);
+                $this->fields[] = new DateField($id, $label, $show_in_column);
                 break;
             case FieldType::TIME:
-                $this->fields[] = new TimeField($id, $label);
+                $this->fields[] = new TimeField($id, $label, $show_in_column);
                 break;
             default:
                 throw new InvalidArgumentException('FieldType not supported for MetaBoxes. FieldType = ' . $type);

@@ -14,6 +14,8 @@ abstract class AbstractTaxonomyField implements TaxonomyFieldInterface
 
     private $required;
 
+    private $show_in_column;
+
     function getId()
     {
         return $this->id;
@@ -29,11 +31,17 @@ abstract class AbstractTaxonomyField implements TaxonomyFieldInterface
         return $this->required;
     }
 
-    public function __construct($id, $label, $required)
+    function isShwoInColumn()
+    {
+        return $this->show_in_column;
+    }
+
+    function __construct($id, $label, $required, $show_in_column)
     {
         $this->id = $id;
         $this->label = $label;
         $this->required = $required;
+        $this->show_in_column = $show_in_column;
     }
 
     function sanitizePostData($post_data)
@@ -135,14 +143,17 @@ abstract class AbstractTaxonomyField implements TaxonomyFieldInterface
 
     public function addTableColumn($columns)
     {
-        $columns[$this->id] = $this->label;
+        if ($this->show_in_column) {
+            $columns[$this->id] = $this->label;
+        }
         return $columns;
     }
 
     public function addTableContent($content, $column_name, $term_id)
     {
-        if ($column_name === $this->id) {
-            return $content . $this->getValue($term_id);
+        if ($this->show_in_column && $column_name == $this->id) {
+            $val = $this->getValue($term_id);
+            return $content . $val !== null && $val !== '' ? $val : '--';
         }
         return $content;
     }

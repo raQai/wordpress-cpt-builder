@@ -6,9 +6,9 @@ defined('ABSPATH') or die('Nope!');
 
 class NumberField extends AbstractMetaBoxField
 {
-    public function __construct($id, $label)
+    public function __construct($id, $label, $show_in_column)
     {
-        parent::__construct('integer', $id, $label);
+        parent::__construct('integer', $id, $label, $show_in_column);
     }
 
     public function renderForScript()

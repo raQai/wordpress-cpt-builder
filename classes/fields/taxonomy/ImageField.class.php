@@ -12,7 +12,7 @@ class ImageField extends AbstractTaxonomyField
 
     public function __construct($id, $label)
     {
-        parent::__construct($id, $label, false);
+        parent::__construct($id, $label, false, false);
     }
 
     function sanitizePostData($post_data)
