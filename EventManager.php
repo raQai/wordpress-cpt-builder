@@ -177,6 +177,8 @@ $registration_meta_box = MetaBoxBuilder::create("biws__reg_meta")
     ->title('Anmeldung')
     ->addField(FieldType::CHECKBOX, 'registration__enable', 'Anmeldeformular anzeigen', true)
     ->addField(FieldType::DATE, 'registration__enddate', 'Anmeldung bis', true)
+    ->addField(FieldType::CHECKBOX, 'registration__email_enabled', 'Email-Benachrichtigung', true)
+    ->addField(FieldType::EMAIL, 'registration__email', 'Empfänger', false, 'name@domain.de')
     ->build();
 
 CustomPostTypeBuilder::create("events")

@@ -62,6 +62,15 @@
         });
     };
 
+    function EmailField(name, label, placeholder) {
+        BasicField.call(this, {
+            name: name,
+            label: label,
+            placeholder: placeholder,
+            type: 'email',
+        });
+    };
+
     function CheckBoxField(name, label, checked = false) {
         BasicField.call(this, {
             name: name,
@@ -114,6 +123,7 @@
             {
                 name: name,
                 title: title,
+                icon: ' '
             },
             ...this.fieldComponents());
     }
@@ -141,6 +151,11 @@
 
         this.addTextField = (name, label, placeholder) => {
             this.pushField(new TextField(name, label, placeholder));
+            return this;
+        }
+
+        this.addEmailField = (name, label, placeholder) => {
+            this.pushField(new EmailField(name, label, placeholder));
             return this;
         }
 

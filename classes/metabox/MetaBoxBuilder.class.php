@@ -5,6 +5,7 @@ namespace BIWS\EventManager\metabox;
 use BIWS\EventManager\fields\FieldType;
 use BIWS\EventManager\fields\metabox\CheckBoxField;
 use BIWS\EventManager\fields\metabox\DateField;
+use BIWS\EventManager\fields\metabox\EmailField;
 use BIWS\EventManager\fields\metabox\NumberField;
 use BIWS\EventManager\fields\metabox\TextField;
 use BIWS\EventManager\fields\metabox\TimeField;
@@ -49,6 +50,9 @@ class MetaBoxBuilder
                 break;
             case FieldType::TEXT:
                 $this->fields[] = new TextField($id, $label, $show_in_column, $placeholder);
+                break;
+            case FieldType::EMAIL:
+                $this->fields[] = new EmailField($id, $label, $show_in_column, $placeholder);
                 break;
             case FieldType::CHECKBOX:
                 $this->fields[] = new CheckBoxField($id, $label, $show_in_column);
