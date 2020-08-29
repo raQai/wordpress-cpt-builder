@@ -4,7 +4,7 @@
  * Plugin Name: Event Manager
  * Description: Simple EventManager Plugin
  * Author: Patrick Bogdan
- * Version: 0.4.2
+ * Version: 0.5.0
  */
 
 namespace BIWS\EventManager;
@@ -25,6 +25,45 @@ define('BIWS_EventManager__PLUGIN_DIR_URL', plugin_dir_url(__FILE__));
 
 include BIWS_EventManager__PLUGIN_DIR_PATH . 'includes/autoloader.inc.php';
 
+$registration_args = array(
+    'label' => __('Anmeldungen', 'biws-textdomain'),
+    'description' => __('Anmeldungen', 'biws-textdomain'),
+    'labels' => array(
+        'name' => __('Anmeldungen', 'biws-textdomain'),
+        'singular_name' => __('Anmeldung', 'biws-textdomain'),
+    ),
+    'supports' => array('title', 'custom-fields'),
+    'menu_icon' => 'dashicons-tickets',
+    'public' => false,
+    'show_ui' => true,
+    'show_in_menu' => 'edit.php?post_type=events',
+    'show_in_rest' => false,
+    'exclude_from_search' => true,
+);
+
+$registration_status_taxonomy = TaxonomyBuilder::create("biws__registration_status")
+    ->args(array(
+        'labels' => array(
+            'name' => _x('Anmeldestatus', 'taxonomy general name'),
+            'singular_name' => _x('Anmeldestatus', 'taxonomy singular name'),
+        ),
+        'hierarchical' => true,
+        'description' => 'Anmeldestatus',
+        'public' => false,
+        'show_admin_column' => true,
+        'show_tag_cloud' => false,
+        'show_ui' => true,
+        'show_in_menu' => true,
+        'show_in_rest' => false,
+        'query_var' => false,
+    ))
+    ->build();
+
+$registration_cpt = CustomPostTypeBuilder::create('biws__registration')
+    ->args($registration_args)
+    ->addTaxonomy($registration_status_taxonomy)
+    ->buildAndInit();
+
 $events_args = array(
     'label' => __('Events', 'biws-textdomain'),
     'description' => __('Turniere und Events', 'biws-textdomain'),
@@ -32,17 +71,15 @@ $events_args = array(
         'name' => __('Events', 'biws-textdomain'),
         'singular_name' => __('Event', 'biws-textdomain'),
     ),
-    'supports' => array('title', 'editor', 'excerpt', 'thumbnail', 'custom-fields'),
-    'hierarchical' => true,
+    'supports' => array('title', 'editor', 'thumbnail', 'custom-fields'),
     'has_archive' => true,
-    'capability_type' => 'page',
     'menu_icon' => 'dashicons-calendar-alt',
     'public' => true,
     'show_ui' => true,
     'show_in_menu' => true,
     'show_in_rest' => true,
     'menu_position' => 5,
-    'exclude_from_search' => true,
+    'exclude_from_search' => false,
     'rewrite' => array('slug' => "events"),
 );
 
@@ -90,6 +127,7 @@ CustomPostTypeBuilder::create("events")
     ->args($events_args)
     ->addTaxonomy($tags_taxonomy)
     ->addMetaBox($test_meta_box)
+    ->addCPT($registration_cpt)
     ->buildAndInit();
 
 /**

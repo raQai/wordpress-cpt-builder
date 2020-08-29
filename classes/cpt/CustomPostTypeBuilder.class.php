@@ -14,6 +14,8 @@ class CustomPostTypeBuilder
 
     private $meta_boxes = [];
 
+    private $child_cpts = [];
+
     private function __construct($slug)
     {
         $this->slug = $slug;
@@ -36,9 +38,15 @@ class CustomPostTypeBuilder
         return $this;
     }
 
-    public function addMetaBox($metaBox)
+    public function addMetaBox($meta_box)
     {
-        $this->meta_boxes[] = $metaBox;
+        $this->meta_boxes[] = $meta_box;
+        return $this;
+    }
+
+    public function addCPT($cpt)
+    {
+        $this->child_cpts[] = $cpt;
         return $this;
     }
 
@@ -48,7 +56,8 @@ class CustomPostTypeBuilder
             $this->slug,
             $this->args,
             $this->taxonomies,
-            $this->meta_boxes
+            $this->meta_boxes,
+            $this->child_cpts,
         );
         $cpt->init();
         return $cpt;

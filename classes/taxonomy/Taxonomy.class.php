@@ -19,6 +19,16 @@ class Taxonomy
         $this->fields = $fields;
     }
 
+    public function getSlug()
+    {
+        return $this->slug;
+    }
+
+    public function getName()
+    {
+        return $this->args['labels']['name'];
+    }
+
     public function init($post_slug)
     {
         add_action('init', function () use ($post_slug) {

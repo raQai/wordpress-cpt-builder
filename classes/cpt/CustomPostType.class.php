@@ -16,18 +16,28 @@ class CustomPostType
 
     private $meta_boxes;
 
-    public function __construct($slug, $args, $taxonomies, $meta_boxes)
+    private $child_cpts;
+
+    public function __construct($slug, $args, $taxonomies, $meta_boxes, $child_cpts)
     {
         $this->slug = $slug;
         $this->args = $args;
         $this->taxonomies = $taxonomies;
         $this->meta_boxes = $meta_boxes;
+        $this->child_cpts = $child_cpts;
+    }
+
+    public function getSlug()
+    {
+        return $this->slug;
     }
 
     public function init()
     {
         // basic initialisation
-        add_action('init', [$this, 'register']);
+        add_action('init', function () {
+            register_post_type($this->slug, $this->args);
+        });
         foreach ($this->taxonomies as $taxonomy) {
             $taxonomy->init($this->slug);
         }
@@ -39,14 +49,37 @@ class CustomPostType
             Scripts::enqueueMetaboxesScript($this->slug, $this->meta_boxes);
         }
 
+        foreach ($this->child_cpts as $child_cpt) {
+            foreach ($child_cpt->taxonomies as $taxonomy) {
+                // add child taxonomies to parent navigation
+                add_action('admin_menu', function () use ($child_cpt, $taxonomy) {
+                    add_submenu_page(
+                        "edit.php?post_type={$this->getSlug()}",
+                        $taxonomy->getName(),
+                        "- {$taxonomy->getName()}",
+                        'manage_options',
+                        "edit-tags.php?taxonomy={$taxonomy->getSlug()}&post_type={$child_cpt->getSlug()}"
+                    );
+                });
+                // fix parent file of taxonomies to allow proper navigation handling
+                add_filter('parent_file', function ($parent_file) use ($child_cpt, $taxonomy) {
+                    global $submenu_file, $current_screen, $pagenow;
+                    if (
+                        $current_screen->post_type == $child_cpt->getSlug() &&
+                        $pagenow == 'edit-tags.php' &&
+                        stripos($submenu_file, $taxonomy->getSlug()) !== false
+                    ) {
+                        $submenu_file = "edit-tags.php?taxonomy={$taxonomy->getSlug()}&post_type={$current_screen->post_type}";
+                        $parent_file = "edit.php?post_type={$this->getSlug()}";
+                    }
+                    return $parent_file;
+                });
+            }
+        }
+
         // event duplication
         add_action('admin_action_duplicateAsDraft', array($this, 'duplicateAsDraft'));
         add_filter('page_row_actions', array($this, 'addDuplicateAction'), 10, 2);
-    }
-
-    public function register()
-    {
-        register_post_type($this->slug, $this->args);
     }
 
     /**
