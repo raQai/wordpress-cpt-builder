@@ -65,11 +65,11 @@ $registration_cpt = CustomPostTypeBuilder::create('biws__registration')
     ->buildAndInit();
 
 $events_args = array(
-    'label' => __('Events', 'biws-textdomain'),
-    'description' => __('Turniere und Events', 'biws-textdomain'),
+    'label' => 'Veranstaltungen',
+    'description' => 'Taki Vreanstaltungen',
     'labels' => array(
-        'name' => __('Events', 'biws-textdomain'),
-        'singular_name' => __('Event', 'biws-textdomain'),
+        'name' => 'Veranstaltungen',
+        'singular_name' => 'Veranstaltung',
     ),
     'supports' => array('title', 'editor', 'thumbnail', 'custom-fields'),
     'has_archive' => true,
@@ -83,51 +83,102 @@ $events_args = array(
     'rewrite' => array('slug' => "events"),
 );
 
-$tags_taxonomy = TaxonomyBuilder::create("taxonomyExample")
+$category_taxonomy = TaxonomyBuilder::create('biws__category')
     ->args(
         array(
             'hierarchical' => true,
             'labels' => array(
-                'name' => _x("tags", 'taxonomy general name'),
-                'singular_name' => _x("tag", 'taxonomy singular name'),
-                'search_items' =>  __('Search ' . "tag"),
-                'all_items' => __('All ' . "tags"),
-                'parent_item' => __('Parent ' . "tag"),
-                'parent_item_colon' => __('Parent ' . "tag" . ':'),
-                'edit_item' => __('Edit ' . "tag"),
-                'update_item' => __('Update ' . "tag"),
-                'add_new_item' => __('Add New ' . "tag"),
-                'new_item_name' => __('New ' . "tag" . ' Name'),
-                'menu_name' => __("tags")
+                'name' => 'Kategorien',
+                'singular_name' => 'Kategorie',
+                'search_items' =>  'Kategorie suchen',
+                'all_items' => 'Alle Kategorien',
+                'parent_item' => 'Übergeordnete Kategorie',
+                'parent_item_colon' => 'Übergeordnete Kategorie:',
+                'edit_item' => 'Kategorie bearbeiten',
+                'update_item' => 'Kategorie aktualisieren',
+                'add_new_item' => 'Neue Kategorie hinzufügen',
+                'new_item_name' => 'Neuer Kategoriename',
             ),
             'show_ui' => true,
             'show_admin_column' => true,
             'show_tag_cloud' => false,
             'show_in_rest' => true,
             'query_var' => true,
-            'rewrite' => array('slug' => "taxample"),
         )
     )
-    ->addField(FieldType::NUMBER, 'order', 'Order#', true, true)
-    ->addField(FieldType::NUMBER, 'order', 'hidden Nr#', false, false)
-    ->addField(FieldType::TEXT, 'texttest', 'TextTest', false, true, 'text placeholder')
-    ->addField(FieldType::COLOR, 'testcolor', 'ColorTest', false, true, '#a1a1b0')
-    ->addField(FieldType::IMAGE, 'testimage', 'TestImage')
     ->build();
 
-$test_meta_box = MetaBoxBuilder::create("testbox")
-    ->title("test meta box title")
-    ->addField(FieldType::NUMBER, 'testmeta_number', 'number test', true)
-    ->addField(FieldType::TEXT, 'texttest', 'TextTest', true, 'text placeholder')
-    ->addField(FieldType::CHECKBOX, 'checkbox_test_0', 'CheckBoxTest inactive', true)
-    ->addField(FieldType::DATE, 'datetest', 'DateTest', true)
-    ->addField(FieldType::TIME, 'timetest', 'TimeTest', true)
+$contact_taxonomy = TaxonomyBuilder::create('biws__contact')
+    ->args(
+        array(
+            'hierarchical' => true,
+            'labels' => array(
+                'name' => 'Ansprechpartner*In',
+                'singular_name' => 'Ansprechpartner*In',
+                'search_items' =>  'Ansprechpartner*In suchen',
+                'all_items' => 'Alle Ansprechpartner*Innen',
+                'parent_item' => 'Übergeordnete/r Ansprechpartner*In',
+                'parent_item_colon' => 'Übergeordnete/r Ansprechpartner*In:',
+                'edit_item' => 'Ansprechpartner*In bearbeiten',
+                'update_item' => 'Ansprechpartner*In aktualisieren',
+                'add_new_item' => 'Neue/n Ansprechpartner*In hinzufügen',
+                'new_item_name' => 'Neuer Ansprechpartner*Innen-Name',
+            ),
+            'show_ui' => true,
+            'show_admin_column' => true,
+            'public' => false,
+            'show_tag_cloud' => false,
+            'show_in_rest' => false,
+        )
+    )
+    ->addField(FieldType::TEXT, 'phone', 'Telefonnummer', true, true, '+49 (0) 111 - 222 333 44')
+    ->addField(FieldType::EMAIL, 'email', 'E-Mail', true, true, 'name@domain.de')
+    ->build();
+
+$location_taxonomy = TaxonomyBuilder::create('biws__location')
+    ->args(
+        array(
+            'hierarchical' => true,
+            'labels' => array(
+                'name' => 'Orte',
+                'singular_name' => 'Ort',
+                'search_items' =>  'Ort suchen',
+                'all_items' => 'Alle Orte',
+                'parent_item' => 'Übergeordneter Ort',
+                'parent_item_colon' => 'Übergeordneter Ort:',
+                'edit_item' => 'Ort bearbeiten',
+                'update_item' => 'Ort aktualisieren',
+                'add_new_item' => 'Neuen Ort hinzufügen',
+                'new_item_name' => 'Neuer Ortname',
+            ),
+            'show_ui' => true,
+            'show_admin_column' => true,
+            'public' => false,
+            'show_tag_cloud' => false,
+            'show_in_rest' => false,
+        )
+    )
+    ->addField(FieldType::TEXT, 'building', 'Gebäude', false, true)
+    ->addField(FieldType::TEXT, 'street', 'Straße', false, true)
+    ->addField(FieldType::TEXT, 'street_nr', 'Hausnummer', false, true)
+    ->addField(FieldType::TEXT, 'zip', 'PLZ', false, true)
+    ->addField(FieldType::TEXT, 'location', 'Ort', false, true)
+    ->build();
+
+$datetime_meta_box = MetaBoxBuilder::create("biws__datetime")
+    ->title('Zeitangaben')
+    ->addField(FieldType::DATE, 'start_date', 'Anfangsdatum', true)
+    ->addField(FieldType::DATE, 'end_date', 'Enddatum', true)
+    ->addField(FieldType::TIME, 'start_time', 'Uhrzeit von', true)
+    ->addField(FieldType::TIME, 'end_time', 'Uhrzeit bis', true)
     ->build();
 
 CustomPostTypeBuilder::create("events")
     ->args($events_args)
-    ->addTaxonomy($tags_taxonomy)
-    ->addMetaBox($test_meta_box)
+    ->addTaxonomy($category_taxonomy)
+    ->addTaxonomy($contact_taxonomy)
+    ->addTaxonomy($location_taxonomy)
+    ->addMetaBox($datetime_meta_box)
     ->addCPT($registration_cpt)
     ->buildAndInit();
 
