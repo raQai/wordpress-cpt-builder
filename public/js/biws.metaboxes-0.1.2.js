@@ -113,10 +113,14 @@
     };
 
     function Metabox(name, title) {
-        this.fields = [];
+        const fields = [];
 
-        this.fieldComponents = () => {
-            return this.fields.map(field => field.toComponent());
+        this.addField = field => {
+            fields.push(field);
+        }
+
+        const fieldComponents = () => {
+            return fields.map(field => field.toComponent());
         }
 
         this.toComponent = () => createElement(PluginDocumentSettingPanel,
@@ -125,68 +129,69 @@
                 title: title,
                 icon: ' '
             },
-            ...this.fieldComponents());
+            ...fieldComponents());
     }
 
     function Builder(name) {
-        this.metaboxes = [];
-        this.name = name;
-
-        this.pushField = field => {
-            if (!this.metaboxes) {
-                throw Error('cannot add field if no matabox was specified before');
+        const metaboxes = [],
+            last = a => {
+                if (!a) {
+                    throw Error('cannot access empty array');
+                }
+                return a[a.length - 1];
+            },
+            pushField = field => {
+                last(metaboxes).addField(field);
             }
-            this.metaboxes[this.metaboxes.length - 1].fields.push(field);
-        }
 
         this.addMetabox = (name, title) => {
-            this.metaboxes.push(new Metabox(name, title));
+            metaboxes.push(new Metabox(name, title));
             return this;
         }
 
         this.addNumberField = (name, label) => {
-            this.pushField(new NumberField(name, label));
+            pushField(new NumberField(name, label));
             return this;
         }
 
         this.addTextField = (name, label, placeholder) => {
-            this.pushField(new TextField(name, label, placeholder));
+            pushField(new TextField(name, label, placeholder));
             return this;
         }
 
         this.addEmailField = (name, label, placeholder) => {
-            this.pushField(new EmailField(name, label, placeholder));
+            pushField(new EmailField(name, label, placeholder));
             return this;
         }
 
         this.addCheckBoxField = (name, label) => {
-            this.pushField(new CheckBoxField(name, label));
+            pushField(new CheckBoxField(name, label));
             return this;
         }
 
         this.addDateField = (name, label) => {
-            this.pushField(new DateField(name, label));
+            pushField(new DateField(name, label));
             return this;
         }
 
         this.addTimeField = (name, label) => {
-            this.pushField(new TimeField(name, label));
+            pushField(new TimeField(name, label));
             return this;
         }
 
         this.build = () => {
-            return plugin(this);
+            return plugin(name, metaboxes);
         }
     }
 
     metaboxes.builder = name => new Builder(name);
 
-    function plugin(builder) {
-        metaboxComponents = () => {
-            return builder.metaboxes.map(metabox => metabox.toComponent());
+    function plugin(name, metaboxes) {
+        const metaboxComponents = () => {
+            return metaboxes.map(metabox => metabox.toComponent());
         }
 
-        return registerPlugin(builder.name, {
+        return registerPlugin(name, {
             render: () => createElement(Fragment, {}, ...metaboxComponents())
         })
     };
