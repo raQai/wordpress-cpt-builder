@@ -117,13 +117,13 @@ class Scripts
             }
         });
         add_action('enqueue_block_editor_assets', function ($post_slug) {
-            if (!self::isLoadScript(array('post.php'), $post_slug)) {
+            if (!self::isLoadScript(array('post.php', 'post-new.php'), $post_slug)) {
                 return;
             }
             wp_enqueue_script('biws-metaboxes');
         });
         add_action('admin_footer', function () use ($post_slug, $meta_boxes) {
-            if (!self::isLoadScript(array('post.php'), $post_slug)) {
+            if (!self::isLoadScript(array('post.php', 'post-new.php'), $post_slug)) {
                 return;
             }
             $script_object = (object)(array());
