@@ -105,4 +105,33 @@ class Taxonomy
         }
         return $content;
     }
+
+    public function getRestCallback($post_id)
+    {
+        $terms = get_the_terms($post_id, $this->slug);
+
+        $data = [];
+        foreach ($terms as $term) {
+            $term_data = array(
+                'name' => $term->name,
+            );
+
+            $description = $term->description;
+            if ($description) {
+                $term_data['description'] = $description;
+
+            }
+
+            foreach ($this->fields as $field) {
+                $value = $field->getValue($term->term_taxonomy_id);
+                if ($value) {
+                    $term_data[$field->getId()] = $value;
+                }
+            }
+
+            $data[] = $term_data;
+        }
+
+        return $data;
+    }
 }

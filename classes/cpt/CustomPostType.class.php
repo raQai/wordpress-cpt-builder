@@ -20,14 +20,24 @@ class CustomPostType
 
     private $unset_columns;
 
-    public function __construct($slug, $args, $taxonomies, $meta_boxes, $child_cpts, $unset_columns)
-    {
+    private $rest_props;
+
+    public function __construct(
+        $slug,
+        $args,
+        $taxonomies,
+        $meta_boxes,
+        $child_cpts,
+        $unset_columns,
+        $rest_props
+    ) {
         $this->slug = $slug;
         $this->args = $args;
         $this->taxonomies = $taxonomies;
         $this->meta_boxes = $meta_boxes;
         $this->child_cpts = $child_cpts;
         $this->unset_columns = $unset_columns;
+        $this->rest_props = $rest_props;
     }
 
     public function getSlug()
@@ -92,6 +102,18 @@ class CustomPostType
         // event duplication
         add_action('admin_action_duplicateAsDraft', array($this, 'duplicateAsDraft'));
         add_filter('post_row_actions', array($this, 'addDuplicateAction'), 10, 2);
+
+        // register rest route
+        if ($this->rest_props) {
+            add_action('rest_api_init', function () {
+                $route = $this->rest_props['route'] ? $this->rest_props['route'] : $this->slug;
+                register_rest_route($this->rest_props['namespace'], $route, array(
+                    'methods' => 'GET',
+                    'callback' => array($this, 'getRestCallback'),
+                    'permission_callback' => $this->rest_props['permission_callback'],
+                ));
+            });
+        }
     }
 
     /**
@@ -213,5 +235,45 @@ class CustomPostType
             $actions['duplicate'] = $action;
         }
         return $actions;
+    }
+
+    function getRestCallback($request)
+    {
+        $params = $this->rest_props['params'];
+        $params['post_type'] = $this->slug;
+        $params = array_merge($params, $request->get_params());
+
+        $posts = get_posts($params);
+
+        $data = [];
+
+        foreach ($posts as $event) {
+            if (post_password_required($event)) {
+                continue;
+            }
+            $event_data = array(
+                'title' => $event->post_title,
+                'link' => get_permalink($event),
+                'content' => apply_filters('the_content', $event->post_content),
+                'slug' => $event->post_name,
+                'status' => get_post_status($event),
+            );
+            foreach ($this->taxonomies as $taxonomy) {
+                $term_data = $taxonomy->getRestCallback($event->ID);
+                if ($term_data) {
+                    $event_data[$taxonomy->getSlug()] = $term_data;
+                }
+            }
+            foreach ($this->meta_boxes as $meta_box) {
+                $meta_box_data = $meta_box->getRestCallback($event->ID);
+                if ($meta_box_data) {
+                    $event_data[$meta_box->getId()] = $meta_box_data;
+                }
+            }
+
+            $data[] = $event_data;
+        }
+
+        return $data;
     }
 }

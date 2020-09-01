@@ -4,7 +4,7 @@
  * Plugin Name: Event Manager
  * Description: Simple EventManager Plugin
  * Author: Patrick Bogdan
- * Version: 0.6.4
+ * Version: 0.7.0
  */
 
 namespace BIWS\EventManager;
@@ -13,6 +13,7 @@ use BIWS\EventManager\cpt\CustomPostTypeBuilder;
 use BIWS\EventManager\fields\FieldType;
 use BIWS\EventManager\metabox\MetaBoxBuilder;
 use BIWS\EventManager\taxonomy\TaxonomyBuilder;
+use DateTime;
 
 defined('ABSPATH') or die('Nope!');
 
@@ -128,7 +129,7 @@ $contact_taxonomy = TaxonomyBuilder::create('biws__contact_tax')
             'show_admin_column' => true,
             'public' => false,
             'show_tag_cloud' => false,
-            'show_in_rest' => false,
+            'show_in_rest' => true,
         )
     )
     ->addField(FieldType::TEXT, 'phone', 'Telefonnummer', true, true, '+49 (0) 111 - 222 333 44')
@@ -155,7 +156,7 @@ $location_taxonomy = TaxonomyBuilder::create('biws__location_tax')
             'show_admin_column' => true,
             'public' => false,
             'show_tag_cloud' => false,
-            'show_in_rest' => false,
+            'show_in_rest' => true,
         )
     )
     ->addField(FieldType::TEXT, 'building', 'Gebäude', false, true)
@@ -181,6 +182,30 @@ $registration_meta_box = MetaBoxBuilder::create("biws__reg_meta")
     ->addField(FieldType::EMAIL, 'registration__email', 'Empfänger', false, 'name@domain.de')
     ->build();
 
+$today_date = new DateTime('today');
+$today_tc = $today_date->format('Y-m-d');
+$events_rest_params = array(
+    'meta_key'   => 'datetime__start_date',
+    'orderby' => 'meta_value',
+    'order' => 'ASC',
+    'eventDisplay' => 'upcoming',
+    'meta_query' => array(
+        'relation' => 'OR',
+        array(
+            'key' => 'datetime__start_date',
+            'value' => $today_tc,
+            'compare' => '>=',
+            'type' => 'CHAR',
+        ),
+        array(
+            'key' => 'datetime__end_date',
+            'value' => $today_tc,
+            'compare' => '>=',
+            'type' => 'CHAR',
+        )
+    )
+);
+
 CustomPostTypeBuilder::create("events")
     ->args($events_args)
     ->addTaxonomy($category_taxonomy)
@@ -190,4 +215,19 @@ CustomPostTypeBuilder::create("events")
     ->addMetaBox($registration_meta_box)
     ->addCPT($registration_cpt)
     ->unsetColumns('date')
+    ->setRestRoute('biws/v1', 'biws__events', $events_rest_params)
     ->buildAndInit();
+
+add_action('rest_api_init', function () {
+    header("Access-Control-Allow-Origin: *");
+    /*
+        // handle individually for each project
+        $origin = get_http_origin();
+        $allowed_origins = ['localhost:5000'];
+        if ($origin && in_array($origin, $allowed_origins)) {
+            // see https://stackoverflow.com/questions/25702061/enable-cors-on-json-api-wordpress
+            header('Access-Control-Allow-Methods: GET');
+            header('Access-Control-Allow-Origin: ' . esc_url_raw($origin));
+        }
+        */
+}, 15);

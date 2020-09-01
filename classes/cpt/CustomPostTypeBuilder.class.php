@@ -18,6 +18,8 @@ class CustomPostTypeBuilder
 
     private $unset_culumns = [];
 
+    private $rest_props;
+
     private function __construct($slug)
     {
         $this->slug = $slug;
@@ -58,6 +60,14 @@ class CustomPostTypeBuilder
         return $this;
     }
 
+    public function setRestRoute($namespace, $route, $params, $permission_callback = '__return_true') {
+        $this->rest_props['namespace'] = $namespace;
+        $this->rest_props['route'] = $route;
+        $this->rest_props['params'] = $params;
+        $this->rest_props['permission_callback'] = $permission_callback;
+        return $this;
+    }
+
     public function buildAndInit()
     {
         $cpt = new CustomPostType(
@@ -67,6 +77,7 @@ class CustomPostTypeBuilder
             $this->meta_boxes,
             $this->child_cpts,
             $this->unset_culumns,
+            $this->rest_props,
         );
         $cpt->init();
         return $cpt;

@@ -21,6 +21,11 @@ class MetaBox
         $this->fields = $fields;
     }
 
+    public function getId()
+    {
+        return $this->id;
+    }
+
     public function init($post_slug)
     {
         foreach ($this->fields as $field) {
@@ -30,7 +35,8 @@ class MetaBox
         add_filter("manage_{$post_slug}_posts_custom_column", array($this, 'addTableContents'), 10, 2);
     }
 
-    public function renderForScript() {
+    public function renderForScript()
+    {
         $string = ".addMetabox('{$this->id}', '{$this->title}')";
         foreach ($this->fields as $field) {
             $string .= $field->renderForScript();
@@ -52,5 +58,44 @@ class MetaBox
             $content = $field->addTableContent($column_name, $post_id);
         }
         return $content;
+    }
+
+    public function getRestCallback($post_id)
+    {
+        $meta_data = [];
+        foreach ($this->fields as $field) {
+            $value = $field->getValue($post_id);
+            if ($value) {
+                $meta_data[$field->getId()] = $value;
+            }
+        }
+
+        return $meta_data;
+
+        /*
+        foreach ($terms as $term) {
+            $term_data = array(
+                'id' => $term->ID,
+                'name' => $term->name,
+            );
+
+            $description = $term->description;
+            if ($description) {
+                $term_data['description'] = $description;
+
+            }
+
+            foreach ($this->fields as $field) {
+                $value = $field->getValue($term->term_taxonomy_id);
+                if ($value) {
+                    $term_data[$field->getId()] = $value;
+                }
+            }
+
+            $data[] = $term_data;
+        }
+
+        return $data;
+        */
     }
 }
