@@ -91,7 +91,7 @@ class CustomPostType
 
         // event duplication
         add_action('admin_action_duplicateAsDraft', array($this, 'duplicateAsDraft'));
-        add_filter('page_row_actions', array($this, 'addDuplicateAction'), 10, 2);
+        add_filter('post_row_actions', array($this, 'addDuplicateAction'), 10, 2);
     }
 
     /**
