@@ -9,7 +9,7 @@ class Scripts
     private const SCRIPT_PATH = BIWS_EventManager__PLUGIN_DIR_PATH . 'includes/scripts/';
     private const SCRIPT_JS_URL = BIWS_EventManager__PLUGIN_DIR_URL . 'public/js/';
     private const MEDIA_UPLOAD = self::SCRIPT_PATH . 'MediaUploaderScript.inc.php';
-    private const JS_MEDIA_UPLOAD = self::SCRIPT_JS_URL . 'biws.media-uploader-0.1.2.js';
+    private const JS_MEDIA_UPLOAD = self::SCRIPT_JS_URL . 'biws.mediauploader-0.2.0.js';
 
     private const METABOXES = self::SCRIPT_PATH . 'MetaboxesScript.inc.php';
     private const JS_METABOXES = self::SCRIPT_JS_URL . 'biws.metaboxes-0.1.2.js';
@@ -51,7 +51,7 @@ class Scripts
                     'biws-media-uploader',
                     self::JS_MEDIA_UPLOAD,
                     array('jquery'),
-                    '0.1.2',
+                    '0.2.0',
                     true
                 );
             }
