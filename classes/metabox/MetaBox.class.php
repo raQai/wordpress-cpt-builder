@@ -60,7 +60,7 @@ class MetaBox
         return $content;
     }
 
-    public function getRestCallback($post_id)
+    public function collectRestResponseData($post_id)
     {
         $meta_data = [];
         foreach ($this->fields as $field) {

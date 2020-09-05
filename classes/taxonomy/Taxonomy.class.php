@@ -106,7 +106,7 @@ class Taxonomy
         return $content;
     }
 
-    public function getRestCallback($post_id)
+    public function collectRestResponseData($post_id)
     {
         $terms = get_the_terms($post_id, $this->slug);
 

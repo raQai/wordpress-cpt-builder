@@ -240,14 +240,49 @@ class CustomPostType
         return $actions;
     }
 
-    function getRestCallback($request)
-    {
+    function prepareQueryParams($requestParams) {
         $params = $this->rest_props['params'];
         $params['post_type'] = $this->slug;
-        $params = array_merge($params, $request->get_params());
+        return array_merge($params, $requestParams);
+    }
 
+    function prepareRestQuery($params) {
         $query = new WP_Query($params);
+        return $query;
+    }
 
+    function collectRestResponseData($posts) {
+        $data = [];
+        foreach ($posts as $event) {
+            $event_data = array(
+                'title' => $event->post_title,
+                'link' => get_permalink($event),
+                'content' => apply_filters('the_content', $event->post_content),
+                'slug' => $event->post_name,
+                'status' => get_post_status($event),
+            );
+            foreach ($this->taxonomies as $taxonomy) {
+                $term_data = $taxonomy->collectRestResponseData($event->ID);
+                if (!$term_data) {
+                    continue;
+                }
+                $event_data[$taxonomy->getSlug()] = $term_data;
+            }
+            foreach ($this->meta_boxes as $meta_box) {
+                $meta_box_data = $meta_box->collectRestResponseData($event->ID);
+                if (!$meta_box_data) {
+                    continue;
+                }
+                $event_data[$meta_box->getId()] = $meta_box_data;
+            }
+
+            $data[] = $event_data;
+        }
+        return $data;
+    }
+
+    function getRestResponse($query)
+    {
         $posts = $query->posts;
 
         if (empty($posts)) {
@@ -258,36 +293,9 @@ class CustomPostType
             );
         }
 
+        $data = $this->collectRestResponseData($posts);
         $max_pages = $query->max_num_pages;
         $total = $query->found_posts;
-
-        $data = [];
-
-        foreach ($posts as $event) {
-            $event_data = array(
-                'title' => $event->post_title,
-                'link' => get_permalink($event),
-                'content' => apply_filters('the_content', $event->post_content),
-                'slug' => $event->post_name,
-                'status' => get_post_status($event),
-            );
-            foreach ($this->taxonomies as $taxonomy) {
-                $term_data = $taxonomy->getRestCallback($event->ID);
-                if (!$term_data) {
-                    continue;
-                }
-                $event_data[$taxonomy->getSlug()] = $term_data;
-            }
-            foreach ($this->meta_boxes as $meta_box) {
-                $meta_box_data = $meta_box->getRestCallback($event->ID);
-                if (!$meta_box_data) {
-                    continue;
-                }
-                $event_data[$meta_box->getId()] = $meta_box_data;
-            }
-
-            $data[] = $event_data;
-        }
 
         $response = new WP_REST_Response($data, 200);
 
@@ -295,5 +303,12 @@ class CustomPostType
         $response->header('X-WP-TotalPAges', $max_pages);
 
         return $response;
+    }
+
+    function getRestCallback($request) {
+        $params = $this->prepareQueryParams($request->get_params());
+        $query = $this->prepareRestQuery($params);
+
+        return $this->getRestResponse($query);
     }
 }
