@@ -3,6 +3,9 @@
 namespace BIWS\EventManager\cpt;
 
 use BIWS\EventManager\Scripts;
+use WP_Error;
+use WP_Query;
+use WP_REST_Response;
 
 defined('ABSPATH') or die('Nope!');
 
@@ -243,14 +246,24 @@ class CustomPostType
         $params['post_type'] = $this->slug;
         $params = array_merge($params, $request->get_params());
 
-        $posts = get_posts($params);
+        $query = new WP_Query($params);
+
+        $posts = $query->posts;
+
+        if (empty($posts)) {
+            return new WP_Error(
+                'biws__no_posts',
+                __('No posts found'),
+                array('status' => 404)
+            );
+        }
+
+        $max_pages = $query->max_num_pages;
+        $total = $query->found_posts;
 
         $data = [];
 
         foreach ($posts as $event) {
-            if (post_password_required($event)) {
-                continue;
-            }
             $event_data = array(
                 'title' => $event->post_title,
                 'link' => get_permalink($event),
@@ -260,20 +273,27 @@ class CustomPostType
             );
             foreach ($this->taxonomies as $taxonomy) {
                 $term_data = $taxonomy->getRestCallback($event->ID);
-                if ($term_data) {
-                    $event_data[$taxonomy->getSlug()] = $term_data;
+                if (!$term_data) {
+                    continue;
                 }
+                $event_data[$taxonomy->getSlug()] = $term_data;
             }
             foreach ($this->meta_boxes as $meta_box) {
                 $meta_box_data = $meta_box->getRestCallback($event->ID);
-                if ($meta_box_data) {
-                    $event_data[$meta_box->getId()] = $meta_box_data;
+                if (!$meta_box_data) {
+                    continue;
                 }
+                $event_data[$meta_box->getId()] = $meta_box_data;
             }
 
             $data[] = $event_data;
         }
 
-        return $data;
+        $response = new WP_REST_Response($data, 200);
+
+        $response->header('X-WP-Total', $total);
+        $response->header('X-WP-TotalPAges', $max_pages);
+
+        return $response;
     }
 }

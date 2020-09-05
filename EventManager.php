@@ -4,7 +4,7 @@
  * Plugin Name: Event Manager
  * Description: Simple EventManager Plugin
  * Author: Patrick Bogdan
- * Version: 0.7.0
+ * Version: 0.7.1
  */
 
 namespace BIWS\EventManager;
@@ -184,26 +184,34 @@ $registration_meta_box = MetaBoxBuilder::create("biws__reg_meta")
 
 $today_date = new DateTime('today');
 $today_tc = $today_date->format('Y-m-d');
+
 $events_rest_params = array(
-    'meta_key'   => 'datetime__start_date',
-    'orderby' => 'meta_value',
-    'order' => 'ASC',
-    'eventDisplay' => 'upcoming',
     'meta_query' => array(
         'relation' => 'OR',
         array(
             'key' => 'datetime__start_date',
-            'value' => $today_tc,
-            'compare' => '>=',
-            'type' => 'CHAR',
+            'value' => "",
+            'compare' => '=',
         ),
         array(
+            'key' => 'datetime__start_date',
+            'compare' => 'NOT EXISTS',
+        ),
+        'start_date_clause' => array(
+            'key' => 'datetime__start_date',
+            'value' => $today_tc,
+            'compare' => '>=',
+        ),
+        'end_date_clause' => array(
             'key' => 'datetime__end_date',
             'value' => $today_tc,
             'compare' => '>=',
-            'type' => 'CHAR',
-        )
-    )
+        ),
+    ),
+    'orderby' => array(
+        'start_date_clause' => 'ASC',
+        'end_date_clause' => 'ASC',
+    ),
 );
 
 CustomPostTypeBuilder::create("events")
