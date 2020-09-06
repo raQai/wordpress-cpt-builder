@@ -4,7 +4,7 @@
  * Plugin Name: Event Manager
  * Description: Simple EventManager Plugin
  * Author: Patrick Bogdan
- * Version: 0.7.1
+ * Version: 0.7.2
  */
 
 namespace BIWS\EventManager;
@@ -14,6 +14,7 @@ use BIWS\EventManager\fields\FieldType;
 use BIWS\EventManager\metabox\MetaBoxBuilder;
 use BIWS\EventManager\taxonomy\TaxonomyBuilder;
 use DateTime;
+use DateTimeZone;
 
 defined('ABSPATH') or die('Nope!');
 
@@ -182,35 +183,42 @@ $registration_meta_box = MetaBoxBuilder::create("biws__reg_meta")
     ->addField(FieldType::EMAIL, 'registration__email', 'Empfänger', false, 'name@domain.de')
     ->build();
 
-$today_date = new DateTime('today');
-$today_tc = $today_date->format('Y-m-d');
+$date = new DateTime('now', new DateTimeZone('Europe/Berlin'));
+$today_date = $date->format('Y-m-d');
 
 $events_rest_params = array(
+    'meta_key' => 'datetime__start_date',
     'meta_query' => array(
-        'relation' => 'OR',
         array(
-            'key' => 'datetime__start_date',
-            'value' => "",
-            'compare' => '=',
-        ),
-        array(
-            'key' => 'datetime__start_date',
-            'compare' => 'NOT EXISTS',
-        ),
-        'start_date_clause' => array(
-            'key' => 'datetime__start_date',
-            'value' => $today_tc,
-            'compare' => '>=',
-        ),
-        'end_date_clause' => array(
-            'key' => 'datetime__end_date',
-            'value' => $today_tc,
-            'compare' => '>=',
+            'relation' => 'OR',
+            array(
+                'key' => 'datetime__start_date',
+                'compare' => 'NOT EXISTS',
+            ),
+            'start_date_clause' => array(
+                'key' => 'datetime__start_date',
+                'value' => $today_date,
+                'type' => 'DATE',
+                'compare' => '>=',
+            ),
+            'start_after_today_clause' => array(
+                'key' => 'datetime__start_date',
+                'value' => $today_date,
+                'type' => 'DATE',
+                'compare' => '>=',
+            ),
+            'end_after_today_clause' => array(
+                'key' => 'datetime__end_date',
+                'value' => $today_date,
+                'type' => 'DATE',
+                'compare' => '>=',
+            ),
         ),
     ),
     'orderby' => array(
-        'start_date_clause' => 'ASC',
-        'end_date_clause' => 'ASC',
+        'meta_value' => 'ASC',
+        'start_after_today_clause' => 'ASC',
+        'end_after_today_claus' => 'ASC',
     ),
 );
 
