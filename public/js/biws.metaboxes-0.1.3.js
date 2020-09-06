@@ -6,8 +6,9 @@
     const { withSelect, withDispatch } = wp.data;
     const { TextControl, CheckboxControl } = wp.components;
 
-    function BasicField(elementProps, control = TextControl) {
-        this.controlProps = props => {
+    function BasicField({ control = TextControl,
+        elementProps,
+        controlPropsFunction = props => {
             const copy = Object.assign({}, props);
 
             // clean up object to avoid errors
@@ -18,27 +19,25 @@
             copy['onChange'] = content => props.setMetaFieldValue(content);
 
             return copy;
-        }
-
-        this.dispatchFunction = (dispatch, props) => {
+        },
+        dispatchFunction = (dispatch, props) => {
             return {
                 setMetaFieldValue: value => dispatch('core/editor')
                     .editPost({ meta: { [props.name]: value } }),
             }
-        }
-
-        this.selectFunction = (select, props) => {
+        },
+        selectFunction = (select, props) => {
             return {
                 metaFieldValue: select('core/editor')
                     .getEditedPostAttribute('meta')[props.name],
             }
-        }
+        } }) {
 
         let composeElement = compose(
-            withDispatch(this.dispatchFunction),
-            withSelect(this.selectFunction)
+            withDispatch(dispatchFunction),
+            withSelect(selectFunction)
         )(props => {
-            return createElement(control, this.controlProps(props));
+            return createElement(control, controlPropsFunction(props));
         });
 
         this.toComponent = () => {
@@ -48,37 +47,37 @@
 
     function NumberField(name, label) {
         BasicField.call(this, {
-            name: name,
-            label: label,
-            type: 'number',
+            elementProps: {
+                name: name,
+                label: label,
+                type: 'number',
+            }
         });
     }
 
     function TextField(name, label, placeholder) {
         BasicField.call(this, {
-            name: name,
-            label: label,
-            placeholder: placeholder,
+            elementProps: {
+                name: name,
+                label: label,
+                placeholder: placeholder,
+            }
         });
     };
 
     function EmailField(name, label, placeholder) {
         BasicField.call(this, {
-            name: name,
-            label: label,
-            placeholder: placeholder,
-            type: 'email',
+            elementProps: {
+                name: name,
+                label: label,
+                placeholder: placeholder,
+                type: 'email',
+            }
         });
     };
 
     function CheckBoxField(name, label, checked = false) {
-        BasicField.call(this, {
-            name: name,
-            label: label,
-            checked: checked,
-        }, CheckboxControl);
-
-        this.controlProps = props => {
+        const controlPropsFunction = props => {
             const copy = Object.assign({}, props);
 
             // clean up object to avoid errors
@@ -89,26 +88,41 @@
             copy.onChange = content => props.setMetaFieldValue(content);
 
             return copy;
-        }
+        };
+
+        BasicField.call(this, {
+            control: CheckboxControl,
+            elementProps: {
+                name: name,
+                label: label,
+                checked: checked,
+            },
+            controlPropsFunction: controlPropsFunction
+        });
+
     };
 
     function DateField(name, label) {
         BasicField.call(this, {
-            name: name,
-            label: label,
-            type: 'date',
-            placeholder: 'YYYY-mm-dd',
-            pattern: '\d{4}-\d{2}-\d{2}',
+            elementProps: {
+                name: name,
+                label: label,
+                type: 'date',
+                placeholder: 'YYYY-mm-dd',
+                pattern: '\d{4}-\d{2}-\d{2}',
+            },
         });
     };
 
     function TimeField(name, label) {
         BasicField.call(this, {
-            name: name,
-            label: label,
-            type: 'time',
-            placeholder: 'hh:mm',
-            pattern: '\d{2}:\d{2}',
+            elementProps: {
+                name: name,
+                label: label,
+                type: 'time',
+                placeholder: 'hh:mm',
+                pattern: '\d{2}:\d{2}',
+            },
         });
     };
 
