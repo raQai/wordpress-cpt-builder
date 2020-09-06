@@ -4,7 +4,7 @@
  * Plugin Name: Event Manager
  * Description: Simple EventManager Plugin
  * Author: Patrick Bogdan
- * Version: 0.7.3
+ * Version: 0.7.4
  */
 
 namespace BIWS\EventManager;
@@ -185,34 +185,77 @@ $registration_meta_box = MetaBoxBuilder::create("biws__reg_meta")
 
 $date = new DateTime('now', new DateTimeZone('Europe/Berlin'));
 $today_date = $date->format('Y-m-d');
+$now_time = $date->format('H:m');
 
 $events_rest_params = array(
-    'meta_key' => 'datetime__start_date',
     'meta_query' => array(
+        'relation' => 'OR',
         array(
-            'relation' => 'OR',
+            'key' => 'datetime__start_date',
+            'compare' => 'NOT EXISTS',
+        ),
+        array(
+            'key' => 'datetime__start_date',
+            'value' => '',
+            'compare' => '=',
+        ),
+        array(
+            'key' => 'datetime__start_date',
+            'value' => $today_date,
+            'type' => 'DATE',
+            'compare' => '>',
+        ),
+        array(
+            'key' => 'datetime__end_date',
+            'value' => $today_date,
+            'type' => 'DATE',
+            'compare' => '>',
+        ),
+        array(
             array(
-                'key' => 'datetime__start_date',
-                'compare' => 'NOT EXISTS',
+                'relation' => 'OR',
+                array(
+                    'key' => 'datetime__start_date',
+                    'value' => $today_date,
+                    'compare' => '=',
+                ),
+                array(
+                    'key' => 'datetime__end_date',
+                    'value' => $today_date,
+                    'compare' => '=',
+                ),
             ),
-            'start_date_clause' => array(
-                'key' => 'datetime__start_date',
-                'value' => $today_date,
-                'type' => 'DATE',
-                'compare' => '>=',
-            ),
-            'start_after_today_clause' => array(
-                'key' => 'datetime__start_date',
-                'value' => $today_date,
-                'type' => 'DATE',
-                'compare' => '>=',
-            ),
-            'end_after_today_clause' => array(
-                'key' => 'datetime__end_date',
-                'value' => $today_date,
-                'type' => 'DATE',
-                'compare' => '>=',
-            ),
+            array(
+                'relation' => 'OR',
+                array(
+                    'key' => 'datetime__start_time',
+                    'value' => '',
+                    'compare' => '=',
+                ),
+                array(
+                    'key' => 'datetime__start_time',
+                    'compare' => 'NOT EXISTS',
+                ),
+                array(
+                    'key' => 'datetime__end_time',
+                    'value' => '',
+                    'compare' => '=',
+                ),
+                array(
+                    'key' => 'datetime__end_time',
+                    'compare' => 'NOT EXISTS',
+                ),
+                array(
+                    'key' => 'datetime__start_time',
+                    'value' => $now_time,
+                    'compare' => '>=',
+                ),
+                array(
+                    'key' => 'datetime__end_time',
+                    'value' => $now_time,
+                    'compare' => '>=',
+                ),
+            )
         ),
     ),
     'orderby' => array(
