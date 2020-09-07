@@ -4,7 +4,7 @@
  * Plugin Name: Event Manager
  * Description: Simple EventManager Plugin
  * Author: Patrick Bogdan
- * Version: 0.7.4
+ * Version: 0.7.5
  */
 
 namespace BIWS\EventManager;
@@ -258,12 +258,39 @@ $events_rest_params = array(
             )
         ),
     ),
-    'orderby' => array(
-        'meta_value' => 'ASC',
-        'start_after_today_clause' => 'ASC',
-        'end_after_today_claus' => 'ASC',
-    ),
 );
+
+function events_sort_callback($event, $other)
+{
+    $event_meta = $event['biws__datetime_meta'];
+    $other_meta = $other['biws__datetime_meta'];
+    $compare_keys = array(
+        'datetime__start_date',
+        'datetime__start_time',
+        'datetime__end_time',
+        'datetime__end_date'
+    );
+
+    foreach ($compare_keys as $key) {
+        $key_exists = array_key_exists($key, $event_meta);
+        $other_exists = array_key_exists($key, $other_meta);
+        $compare = 0;
+        if (!$key_exists && !$other_exists) {
+            continue;
+        } else if (!$key_exists) {
+            $compare = -1;
+        } else if (!$other_exists) {
+            $compare = 1;
+        } else {
+            $compare = $event_meta[$key] <=> $other_meta[$key];
+        }
+        if ($compare !== 0) {
+            return $compare;
+        }
+    }
+
+    return 0;
+};
 
 CustomPostTypeBuilder::create("events")
     ->args($events_args)
@@ -274,7 +301,12 @@ CustomPostTypeBuilder::create("events")
     ->addMetaBox($registration_meta_box)
     ->addCPT($registration_cpt)
     ->unsetColumns('date')
-    ->setRestRoute('biws/v1', 'biws__events', $events_rest_params)
+    ->setRestRoute(
+        'biws/v1',
+        'biws__events',
+        $events_rest_params,
+        '\\' . __NAMESPACE__ . '\\events_sort_callback'
+    )
     ->buildAndInit();
 
 add_action('rest_api_init', function () {

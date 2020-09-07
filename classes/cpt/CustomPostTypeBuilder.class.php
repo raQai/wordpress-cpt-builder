@@ -60,10 +60,17 @@ class CustomPostTypeBuilder
         return $this;
     }
 
-    public function setRestRoute($namespace, $route, $params, $permission_callback = '__return_true') {
+    public function setRestRoute(
+        $namespace,
+        $route,
+        $params,
+        $sort_callback = null,
+        $permission_callback = '__return_true'
+    ) {
         $this->rest_props['namespace'] = $namespace;
         $this->rest_props['route'] = $route;
         $this->rest_props['params'] = $params;
+        $this->rest_props['sort_callback'] = $sort_callback;
         $this->rest_props['permission_callback'] = $permission_callback;
         return $this;
     }

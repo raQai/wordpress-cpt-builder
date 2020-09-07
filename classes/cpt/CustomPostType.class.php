@@ -32,7 +32,7 @@ class CustomPostType
         $meta_boxes,
         $child_cpts,
         $unset_columns,
-        $rest_props
+        $rest_props = []
     ) {
         $this->slug = $slug;
         $this->args = $args;
@@ -232,26 +232,71 @@ class CustomPostType
             $action = sprintf(
                 $format,
                 $nonce,
-                'Duplicate this item',
-                'Duplicate'
+                'Eintrag duplizieren',
+                'Duplizieren'
             );
             $actions['duplicate'] = $action;
         }
         return $actions;
     }
 
-    function prepareQueryParams($requestParams) {
+    function getRestParam($name)
+    {
+        $props = $this->rest_props;
+        if (!array_key_exists('params', $props)) {
+            return false;
+        }
         $params = $this->rest_props['params'];
+        if (!$params) {
+            return false;
+        }
+        if (!array_key_exists($name, $params)) {
+            return false;
+        }
+        return $params[$name];
+    }
+
+    function perPage()
+    {
+        $per_page = $this->getRestParam('posts_per_page');
+        return $per_page ? intval($per_page) : -1;
+    }
+
+    function page()
+    {
+        $page = $this->getRestParam('paged');
+        return $page ? intval($page) : -1;
+    }
+
+    /**
+     * defines if post processing is necessarry. Currently only when sorting
+     */
+    function needsPostProcessing()
+    {
+        return $this->rest_props &&
+            array_key_exists('sort_callback', $this->rest_props) &&
+            $this->rest_props['sort_callback'];
+    }
+
+    function prepareQueryParams($requestParams)
+    {
+        $params = array_key_exists('params', $this->rest_props)
+            ? $this->rest_props['params']
+            : [];
         $params['post_type'] = $this->slug;
-        return array_merge($params, $requestParams);
+        $params = array_merge($params, $requestParams);
+        $this->rest_props['params'] = $params;
+
+        // overwrite page params due to post processing but keep it stored
+        // in rest_props for post processing
+        if ($this->needsPostProcessing()) {
+            $params['nopaging'] = true;
+        }
+        return $params;
     }
 
-    function prepareRestQuery($params) {
-        $query = new WP_Query($params);
-        return $query;
-    }
-
-    function collectRestResponseData($posts) {
+    function collectRestResponseData($posts)
+    {
         $data = [];
         foreach ($posts as $event) {
             $event_data = array(
@@ -278,14 +323,75 @@ class CustomPostType
 
             $data[] = $event_data;
         }
+
         return $data;
+    }
+
+    function sortRestResponseData($data, $sort_callback)
+    {
+        if ($sort_callback) {
+            usort($data, $sort_callback);
+        }
+        return $data;
+    }
+
+    function postProcessPageData($data)
+    {
+        $posts_per_page = $this->perPage();
+        if ($posts_per_page <= 0) {
+            return $data;
+        }
+        $paged = $this->page();
+        if ($paged <= 0) {
+            return array_slice($data, 0, $posts_per_page);
+        }
+        return array_slice($data, ($paged - 1) * $posts_per_page, $posts_per_page);
+    }
+
+    function postProcessNumPages($data)
+    {
+        $posts_per_page = $this->perPage();
+        if ($posts_per_page <= 0) {
+            return 1;
+        }
+        return ceil(count($data) / $posts_per_page);
+    }
+
+    function postProcessPostCount($data, $numPages)
+    {
+        $count = count($data);
+
+        $posts_per_page = $this->perPage();
+        if ($posts_per_page <= 0) {
+            return $count;
+        }
+
+        $paged = $this->page();
+        if ($paged < $numPages) {
+            return min($count, $posts_per_page);
+        }
+        return $count % $posts_per_page;
     }
 
     function getRestResponse($query)
     {
         $posts = $query->posts;
 
-        if (empty($posts)) {
+        $data = $this->collectRestResponseData($posts);
+
+        $numPages = $query->max_num_pages;
+        $numPosts = $query->found_posts;
+        if ($this->needsPostProcessing()) {
+            $props = $this->rest_props;
+            if ($props && array_key_exists('sort_callback', $props) && $props['sort_callback']) {
+                $data = $this->sortRestResponseData($data, $props['sort_callback']);
+            }
+            $numPages = $this->postProcessNumPages($data);
+            $numPosts = $this->postProcessPostCount($data, $numPages);
+            $data = $this->postProcessPageData($data);
+        }
+
+        if (empty($data)) {
             return new WP_Error(
                 'biws__no_posts',
                 __('No posts found'),
@@ -293,21 +399,18 @@ class CustomPostType
             );
         }
 
-        $data = $this->collectRestResponseData($posts);
-        $max_pages = $query->max_num_pages;
-        $total = $query->found_posts;
-
         $response = new WP_REST_Response($data, 200);
 
-        $response->header('X-WP-Total', $total);
-        $response->header('X-WP-TotalPAges', $max_pages);
+        $response->header('X-WP-TotalPages', $numPages);
+        $response->header('X-WP-Total', $numPosts);
 
         return $response;
     }
 
-    function getRestCallback($request) {
+    function getRestCallback($request)
+    {
         $params = $this->prepareQueryParams($request->get_params());
-        $query = $this->prepareRestQuery($params);
+        $query = new WP_Query($params);
 
         return $this->getRestResponse($query);
     }
