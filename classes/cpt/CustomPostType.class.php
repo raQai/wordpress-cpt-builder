@@ -295,26 +295,28 @@ class CustomPostType
         return $params;
     }
 
-    function collectRestResponseData($posts)
+    function collectRestResponseData($query)
     {
         $data = [];
-        foreach ($posts as $event) {
+        while ($query->have_posts()) {
+            $event = $query->the_post();
+            $event_id = get_the_ID();
             $event_data = array(
-                'title' => $event->post_title,
-                'link' => get_permalink($event),
-                'content' => apply_filters('the_content', $event->post_content),
-                'slug' => $event->post_name,
-                'status' => get_post_status($event),
+                'title' => wp_kses_post(get_the_title()),
+                'link' =>  get_the_permalink(),
+                'content' => wp_kses_post(get_the_content()),
+                'slug' => get_post_field('post_name', $event),
+                'status' => get_post_status($event_id),
             );
             foreach ($this->taxonomies as $taxonomy) {
-                $term_data = $taxonomy->collectRestResponseData($event->ID);
+                $term_data = $taxonomy->collectRestResponseData($event_id);
                 if (!$term_data) {
                     continue;
                 }
                 $event_data[$taxonomy->getSlug()] = $term_data;
             }
             foreach ($this->meta_boxes as $meta_box) {
-                $meta_box_data = $meta_box->collectRestResponseData($event->ID);
+                $meta_box_data = $meta_box->collectRestResponseData($event_id);
                 if (!$meta_box_data) {
                     continue;
                 }
@@ -375,9 +377,7 @@ class CustomPostType
 
     function getRestResponse($query)
     {
-        $posts = $query->posts;
-
-        $data = $this->collectRestResponseData($posts);
+        $data = $this->collectRestResponseData($query);
 
         $numPages = $query->max_num_pages;
         $numPosts = $query->found_posts;
@@ -411,7 +411,8 @@ class CustomPostType
     {
         $params = $this->prepareQueryParams($request->get_params());
         $query = new WP_Query($params);
-
-        return $this->getRestResponse($query);
+        $response = $this->getRestResponse($query);
+        wp_reset_postdata();
+        return $response;
     }
 }
