@@ -4,7 +4,7 @@
  * Plugin Name: Event Manager
  * Description: Simple EventManager Plugin
  * Author: Patrick Bogdan
- * Version: 0.7.5
+ * Version: 0.8.0
  */
 
 namespace BIWS\EventManager;
@@ -100,6 +100,26 @@ $category_taxonomy = TaxonomyBuilder::create('biws__cat_tax')
                 'update_item' => 'Kategorie aktualisieren',
                 'add_new_item' => 'Neue Kategorie hinzufügen',
                 'new_item_name' => 'Neuer Kategoriename',
+            ),
+            'show_ui' => true,
+            'show_admin_column' => true,
+            'show_tag_cloud' => false,
+            'show_in_rest' => true,
+            'query_var' => true,
+        )
+    )
+    ->build();
+
+$region_taxonomy = TaxonomyBuilder::create('biws__region_tax')
+    ->args(
+        array(
+            'hierarchical' => true,
+            'labels' => array(
+                'name' => 'Regionen',
+                'singular_name' => 'Region',
+                'add_new_item' => 'Neue Region erstellen',
+                'search_items' => 'Region suchen',
+                'edit_item' => 'Region bearbeiten',
             ),
             'show_ui' => true,
             'show_admin_column' => true,
@@ -295,8 +315,9 @@ function events_sort_callback($event, $other)
 CustomPostTypeBuilder::create("events")
     ->args($events_args)
     ->addTaxonomy($category_taxonomy)
-    ->addTaxonomy($contact_taxonomy)
+    ->addTaxonomy($region_taxonomy)
     ->addTaxonomy($location_taxonomy)
+    ->addTaxonomy($contact_taxonomy)
     ->addMetaBox($datetime_meta_box)
     ->addMetaBox($registration_meta_box)
     ->addCPT($registration_cpt)

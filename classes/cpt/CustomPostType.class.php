@@ -110,11 +110,27 @@ class CustomPostType
         if ($this->rest_props) {
             add_action('rest_api_init', function () {
                 $route = $this->rest_props['route'] ? $this->rest_props['route'] : $this->slug;
-                register_rest_route($this->rest_props['namespace'], $route, array(
-                    'methods' => 'GET',
-                    'callback' => array($this, 'getRestCallback'),
-                    'permission_callback' => $this->rest_props['permission_callback'],
-                ));
+                register_rest_route(
+                    $this->rest_props['namespace'],
+                    $route,
+                    array(
+                        'methods' => 'GET',
+                        'callback' => array($this, 'getRestCallback'),
+                        'permission_callback' => $this->rest_props['permission_callback'],
+                    )
+                );
+
+                foreach ($this->taxonomies as $taxonomy) {
+                    register_rest_route(
+                        $this->rest_props['namespace'],
+                        $taxonomy->getSlug(),
+                        array(
+                            'methods' => 'GET',
+                            'callback' => array($taxonomy, 'getRestCallback'),
+                            'permission_callback' => $this->rest_props['permission_callback'],
+                        )
+                    );
+                }
             });
         }
     }

@@ -2,6 +2,8 @@
 
 namespace BIWS\EventManager\taxonomy;
 
+use WP_Term_Query;
+
 defined('ABSPATH') or die('Nope!');
 
 class Taxonomy
@@ -106,20 +108,18 @@ class Taxonomy
         return $content;
     }
 
-    public function collectRestResponseData($post_id)
+    function collectTermData($terms)
     {
-        $terms = get_the_terms($post_id, $this->slug);
-
         $data = [];
         foreach ($terms as $term) {
             $term_data = array(
                 'name' => $term->name,
+                'slug' => $term->slug,
             );
 
             $description = $term->description;
             if ($description) {
                 $term_data['description'] = $description;
-
             }
 
             foreach ($this->fields as $field) {
@@ -133,5 +133,20 @@ class Taxonomy
         }
 
         return $data;
+    }
+
+    public function getRestCallback($request)
+    {
+
+        $query = new WP_Term_Query(array(
+            'taxonomy' => $this->slug,
+        ));
+        return $this->collectTermData($query->get_terms());
+    }
+
+    public function collectRestResponseData($post_id)
+    {
+        $terms = get_the_terms($post_id, $this->slug);
+        return $this->collectTermData($terms);
     }
 }
