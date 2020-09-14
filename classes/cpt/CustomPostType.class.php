@@ -104,7 +104,13 @@ class CustomPostType
 
         // event duplication
         add_action('admin_action_duplicateAsDraft', array($this, 'duplicateAsDraft'));
-        add_filter('post_row_actions', array($this, 'addDuplicateAction'), 10, 2);
+        $isPage = array_key_exists('hierarchical', $this->args) && $this->args['hierarchical'] === true;
+        if ($isPage) {
+            add_filter('page_row_actions', array($this, 'addDuplicateAction'), 10, 2);
+        } else {
+            // is post
+            add_filter('post_row_actions', array($this, 'addDuplicateAction'), 10, 2);
+        }
 
         // register rest route
         if ($this->rest_props) {
