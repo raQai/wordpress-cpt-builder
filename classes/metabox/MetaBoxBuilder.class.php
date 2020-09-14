@@ -1,14 +1,14 @@
 <?php
 
-namespace BIWS\EventManager\metabox;
+namespace BIWS\CPTBuilder\metabox;
 
-use BIWS\EventManager\fields\FieldType;
-use BIWS\EventManager\fields\metabox\CheckBoxField;
-use BIWS\EventManager\fields\metabox\DateField;
-use BIWS\EventManager\fields\metabox\EmailField;
-use BIWS\EventManager\fields\metabox\NumberField;
-use BIWS\EventManager\fields\metabox\TextField;
-use BIWS\EventManager\fields\metabox\TimeField;
+use BIWS\CPTBuilder\fields\FieldType;
+use BIWS\CPTBuilder\fields\metabox\CheckBoxField;
+use BIWS\CPTBuilder\fields\metabox\DateField;
+use BIWS\CPTBuilder\fields\metabox\EmailField;
+use BIWS\CPTBuilder\fields\metabox\NumberField;
+use BIWS\CPTBuilder\fields\metabox\TextField;
+use BIWS\CPTBuilder\fields\metabox\TimeField;
 use InvalidArgumentException;
 
 defined('ABSPATH') or die('Nope!');

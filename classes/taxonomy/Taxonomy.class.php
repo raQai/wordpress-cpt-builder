@@ -1,6 +1,6 @@
 <?php
 
-namespace BIWS\EventManager\taxonomy;
+namespace BIWS\CPTBuilder\taxonomy;
 
 use WP_Term_Query;
 

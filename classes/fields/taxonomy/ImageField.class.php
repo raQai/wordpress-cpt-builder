@@ -1,9 +1,9 @@
 <?php
 
-namespace BIWS\EventManager\fields\taxonomy;
+namespace BIWS\CPTBuilder\fields\taxonomy;
 
-use BIWS\EventManager\Scripts;
-use BIWS\EventManager\Templates;
+use BIWS\CPTBuilder\Scripts;
+use BIWS\CPTBuilder\Templates;
 
 defined('ABSPATH') or die('Nope!');
 

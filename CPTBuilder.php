@@ -1,20 +1,21 @@
 <?php
 
 /**
- * Plugin Name: Event Manager
- * Description: Simple EventManager Plugin
+ * @package CPTBuilder
+ * @author Patrick Bogdan
+ * @copyright 2020 Patrick Bogdan
+ * @license http://www.gnu.org/licenses/gpl-2.0.html GNU General Public License, version 2 or later
+ *
+ * @wordpress-plugin
+ * Plugin Name: BIWS CPT Builder
+ * Description: Builder Plugin to generate custom post types
  * Author: Patrick Bogdan
- * Version: 0.8.2
+ * Version: 1.0.0
+ * License: GPL v2 or later
+ * License URI: http://www.gnu.org/licenses/gpl-2.0.html
  */
 
-namespace BIWS\EventManager;
-
-use BIWS\EventManager\cpt\CustomPostTypeBuilder;
-use BIWS\EventManager\fields\FieldType;
-use BIWS\EventManager\metabox\MetaBoxBuilder;
-use BIWS\EventManager\taxonomy\TaxonomyBuilder;
-use DateTime;
-use DateTimeZone;
+namespace BIWS\CPTBuilder;
 
 defined('ABSPATH') or die('Nope!');
 
@@ -25,8 +26,9 @@ if (!defined('WPINC')) {
 define('BIWS_EventManager__PLUGIN_DIR_PATH', plugin_dir_path(__FILE__));
 define('BIWS_EventManager__PLUGIN_DIR_URL', plugin_dir_url(__FILE__));
 
-include BIWS_EventManager__PLUGIN_DIR_PATH . 'includes/autoloader.inc.php';
+require_once BIWS_EventManager__PLUGIN_DIR_PATH . 'includes/autoloader.inc.php';
 
+/*
 $registration_args = array(
     'label' => 'Anmeldungen',
     'description' => 'Anmeldungen',
@@ -332,7 +334,6 @@ CustomPostTypeBuilder::create("events")
 
 add_action('rest_api_init', function () {
     header("Access-Control-Allow-Origin: *");
-    /*
         // handle individually for each project
         $origin = get_http_origin();
         $allowed_origins = ['localhost:5000'];
@@ -341,5 +342,5 @@ add_action('rest_api_init', function () {
             header('Access-Control-Allow-Methods: GET');
             header('Access-Control-Allow-Origin: ' . esc_url_raw($origin));
         }
-        */
 }, 15);
+*/

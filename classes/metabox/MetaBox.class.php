@@ -1,8 +1,8 @@
 <?php
 
-namespace BIWS\EventManager\metabox;
+namespace BIWS\CPTBuilder\metabox;
 
-use BIWS\EventManager\Templates;
+use BIWS\CPTBuilder\Templates;
 
 defined('ABSPATH') or die('Nope!');
 

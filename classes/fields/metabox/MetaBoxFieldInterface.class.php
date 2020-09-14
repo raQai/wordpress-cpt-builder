@@ -1,8 +1,8 @@
 <?php
 
-namespace BIWS\EventManager\fields\metabox;
+namespace BIWS\CPTBuilder\fields\metabox;
 
-use BIWS\EventManager\fields\FieldInterface;
+use BIWS\CPTBuilder\fields\FieldInterface;
 
 defined('ABSPATH') or die('Nope!');
 

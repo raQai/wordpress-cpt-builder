@@ -1,8 +1,8 @@
 <?php
 
-namespace BIWS\EventManager\fields\taxonomy;
+namespace BIWS\CPTBuilder\fields\taxonomy;
 
-use BIWS\EventManager\fields\FieldInterface;
+use BIWS\CPTBuilder\fields\FieldInterface;
 
 defined('ABSPATH') or die('Nope!');
 

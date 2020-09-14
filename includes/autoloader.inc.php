@@ -1,6 +1,12 @@
 <?php
 
-namespace BIWS\EventManager;
+namespace BIWS\CPTBuilder;
+
+defined('ABSPATH') or die('Nope!');
+
+if (!defined('WPINC')) {
+    die;
+}
 
 spl_autoload_register(function ($className) {
     if (strpos($className, __NAMESPACE__) !== 0) {

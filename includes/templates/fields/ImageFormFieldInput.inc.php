@@ -1,6 +1,6 @@
 <?php
 
-namespace BIWS\EventManager\templates\fields;
+namespace BIWS\CPTBuilder\templates\fields;
 
 defined('ABSPATH') or die('Nope!');
 

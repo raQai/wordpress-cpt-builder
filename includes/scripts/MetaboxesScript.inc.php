@@ -1,6 +1,6 @@
 <?php
 
-namespace BIWS\EventManager\scripts;
+namespace BIWS\CPTBuilder\scripts;
 
 defined('ABSPATH') or die('Nope!');
 

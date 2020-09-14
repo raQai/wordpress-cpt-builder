@@ -1,12 +1,12 @@
 <?php
 
-namespace BIWS\EventManager\taxonomy;
+namespace BIWS\CPTBuilder\taxonomy;
 
-use BIWS\EventManager\fields\FieldType;
-use BIWS\EventManager\fields\taxonomy\ColorField;
-use BIWS\EventManager\fields\taxonomy\ImageField;
-use BIWS\EventManager\fields\taxonomy\NumberField;
-use BIWS\EventManager\fields\taxonomy\TextField;
+use BIWS\CPTBuilder\fields\FieldType;
+use BIWS\CPTBuilder\fields\taxonomy\ColorField;
+use BIWS\CPTBuilder\fields\taxonomy\ImageField;
+use BIWS\CPTBuilder\fields\taxonomy\NumberField;
+use BIWS\CPTBuilder\fields\taxonomy\TextField;
 use InvalidArgumentException;
 
 defined('ABSPATH') or die('Nope!');

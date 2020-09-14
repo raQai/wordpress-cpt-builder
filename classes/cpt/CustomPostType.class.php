@@ -1,8 +1,8 @@
 <?php
 
-namespace BIWS\EventManager\cpt;
+namespace BIWS\CPTBuilder\cpt;
 
-use BIWS\EventManager\Scripts;
+use BIWS\CPTBuilder\Scripts;
 use WP_Error;
 use WP_Query;
 use WP_REST_Response;

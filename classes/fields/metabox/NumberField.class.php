@@ -1,6 +1,6 @@
 <?php
 
-namespace BIWS\EventManager\fields\metabox;
+namespace BIWS\CPTBuilder\fields\metabox;
 
 defined('ABSPATH') or die('Nope!');
 
