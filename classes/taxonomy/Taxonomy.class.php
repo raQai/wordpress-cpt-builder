@@ -140,6 +140,7 @@ class Taxonomy
 
         $query = new WP_Term_Query(array(
             'taxonomy' => $this->slug,
+            'hide_empty' => false,
         ));
         return $this->collectTermData($query->get_terms());
     }
