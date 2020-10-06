@@ -12,7 +12,7 @@
  *
  * @since      1.0.0
  *
- * @see        /public/js/biws.mediaupöpader-{script-version}.js
+ * @see        /public/js/biws.mediauploader-{script-version}.js
  *
  * @package    BIWS\CPTBuilder\templates\admin\script
  * @subpackage mediaupload
